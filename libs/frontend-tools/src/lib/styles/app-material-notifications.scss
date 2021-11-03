@@ -1,0 +1,10 @@
+/*
+========================
+    Notifications
+========================
+*/
+.mat-snack-bar-container {
+  &.success {
+    border-bottom: 5px solid greenyellow;
+  }
+}

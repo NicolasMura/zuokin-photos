@@ -1,0 +1,47 @@
+{
+  "npmScope": "zuokin-photos",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    ".eslintrc.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "projects": {
+    "frontend-public": {
+      "tags": []
+    },
+    "frontend-public-e2e": {
+      "tags": [],
+      "implicitDependencies": ["frontend-public"]
+    },
+    "frontend-tools": {
+      "tags": []
+    },
+    "models": {
+      "tags": []
+    },
+    "vendors": {
+      "tags": []
+    }
+  }
+}

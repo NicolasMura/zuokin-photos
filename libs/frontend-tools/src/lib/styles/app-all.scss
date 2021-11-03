@@ -1,0 +1,46 @@
+@import 'app-material-theme';
+@import 'app-material-notifications';
+@import 'app-startup-loader';
+@import 'app-spinners';
+
+
+/*
+===============
+    General
+===============
+*/
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: $cpt-bg-color-darker;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+::selection {
+  background: lighten($cpt-secondary, 10%);
+}
+
+.cpt-color-green {
+  color: greenyellow;
+}
+
+.cpt-color-warn {
+  color: $cpt-warn;
+}
+
+.cpt-bg-color-warn {
+  background-color: $cpt-warn;
+  color: white;
+}
+
+.cpt-bg-color-grey {
+  background-color: lightgrey;
+}
