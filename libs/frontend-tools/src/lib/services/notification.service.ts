@@ -23,7 +23,7 @@ export class NotificationService {
         duration: action ? 0 : (options && options.duration ? options.duration : 5000),
         panelClass: options && options.panelClass ?
           (options.panelClass instanceof Array ?
-            ['zphotos-theme', options.panelClass.join(' ')] : ['zphotos-theme', options.panelClass])
+            ['zphotos-theme', ...options.panelClass] : ['zphotos-theme', options.panelClass])
           : ['zphotos-theme']
       }
     );

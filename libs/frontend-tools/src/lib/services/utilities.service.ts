@@ -33,7 +33,7 @@ export class UtilitiesService extends GlobalService {
     private http: HttpClient,
     private router: Router,
     private clipboard: Clipboard,
-    @Inject(NotificationService) private notificationService: NotificationService,
+    private notificationService: NotificationService,
     protected errorHandlingService: ErrorHandlingService,
     @Inject(WINDOW) private window: Window
   ) {

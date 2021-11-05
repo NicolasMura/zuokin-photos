@@ -52,13 +52,17 @@ export class LoginComponent implements OnInit {
         console.log(loginResponse);
         this.router.navigate([CoreConstants.routePath.root]);
       }, error => {
-        // @TODO : gestion fine des erreurs avec le backend + handleError()
         console.error(error);
         this.loginLoadingSpinner = false;
         this.loginError = true;
         this.enableLoginForm();
-        const userErrorMsg = error.message ? error.message + ' (connexion impossible)' : 'Erreur inconnue (connexion impossible)';
-        this.notificationService.sendNotification(userErrorMsg, '', { panelClass: 'notification-login-by-username-error' });
+        const userErrorMsg = error.message ? error.message + ' (connexion impossible)'
+          : 'Erreur inconnue (connexion impossible)';
+        this.notificationService.sendNotification(
+          userErrorMsg,
+          '',
+          { panelClass: ['failure', 'notification-login-by-username-error'] }
+        );
       });
     }
   }
