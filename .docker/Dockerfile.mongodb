@@ -1,0 +1,9 @@
+# Create image based on the official mongo image from the dockerhub
+FROM mongo:4.4
+
+# Add some debug utilities
+RUN apt-get update && apt-get install nano
+
+# Add create mongodb user and database healthcheck scripts
+COPY ./scripts/mongo-init.sh /docker-entrypoint-initdb.d/
+COPY ./scripts/database-healthcheck.sh /usr/local/bin/

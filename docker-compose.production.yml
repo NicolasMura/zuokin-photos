@@ -1,0 +1,11 @@
+version: "3.7"
+
+# Define the services/containers overrides
+services:
+  database:
+    volumes:
+      - ${MONGODB_LOGS_DIR}:/var/log/mongodb/
+      - mongodb:/data/db
+
+volumes:
+  mongodb:

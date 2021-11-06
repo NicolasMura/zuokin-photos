@@ -1,0 +1,65 @@
+version: "3.7" # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+  frontend: # name of Angular app service
+    image: nicolasmura/zuokin-photos-frontend-public
+    container_name: frontend-v2
+    env_file:
+      - .env
+    ports:
+      - ${HOST_HTTPS_PORT}:443
+    volumes:
+      - ${ENV_JS}:/usr/local/apache2/htdocs/zuokin-photos/frontend-public/env.js
+      - ${APACHE_LOG}:/var/log/apache2
+      - ${SSL_VOLUME}:/var/imported/ssl
+    depends_on:
+      - database
+      - api
+    networks:
+      zuokin-photos-network:
+
+  api: # name of Node JS app
+    image: nicolasmura/zuokin-photos-backend-api
+    container_name: backend-v2
+    env_file:
+      - .env
+    ports:
+      - ${NODE_PORT}:${NODE_PORT}
+    volumes:
+      - .env:/usr/zuokin-photos/backend-api/dist/apps/backend-api/.env
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      zuokin-photos-network:
+        aliases:
+          - database
+
+  database: # name of database service
+    # image: nicolasmura/zuokin-photos-database
+    image: zuokin-photos-database
+    container_name: database-v2
+    env_file:
+      - .env
+    ports:
+      - ${MONGODB_PORT}:${MONGODB_PORT}
+    command: ["--port", "$MONGODB_PORT", "--logpath", "/var/log/mongodb/mongod.log"] # override the default command to start the service in the container
+    healthcheck:
+      test: ["CMD", "database-healthcheck.sh"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+      start_period: 20s
+    networks:
+      zuokin-photos-network:
+        aliases:
+          - database
+
+networks:
+  zuokin-photos-network:
+    driver: bridge
+    name: zuokin-photos-network
+
+# volumes: set in docker-compose.macosx-override.yml & docker-compose.production.yml

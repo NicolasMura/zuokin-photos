@@ -1,0 +1,20 @@
+# must be defined in backend/.env
+
+version: "3.7"
+
+# Define the services/containers overrides
+services:
+  frontend:
+    # to be tested for developping via Docker container!
+    volumes:
+      - ./apps/frontend-public:/app # this will enable changes made to the angular app reflect in the container
+
+  api:
+    # to be tested for developping via Docker container!
+    volumes:
+      - ./apps/backend-api:/app # this will enable changes made to the angular app reflect in the container
+
+  database:
+    volumes:
+      - ${MONGODB_LOGS_DIR}:/var/log/mongodb/
+      - ${MONGODB_DB_DIR_FOR_MAC_ONLY}:/data/db # Mac OS X only (because named volume does not work)

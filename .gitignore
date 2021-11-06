@@ -41,3 +41,12 @@ Thumbs.db
 .env
 deploy.sh
 dist-public.tar.gz
+ssl/fullchain.pem
+ssl/privkey.pem
+scripts/generate-build-infos.js
+.docker/apache_vol/log/*
+!.docker/apache_vol/log/.gitkeep
+.docker/apache_vol/ssl/*
+!.docker/apache_vol/ssl/.gitkeep
+.docker/mongodb_vol/*
+!.docker/mongodb_vol/.gitkeep
