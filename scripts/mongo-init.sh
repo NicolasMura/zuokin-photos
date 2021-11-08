@@ -20,14 +20,13 @@ mongo --eval "
   )
 
   db.getCollection('users').insertOne({
-    username: '$MONGO_INITDB_APPUSER_EMAIL',
+    username: '$MONGO_INITDB_APPUSER_USERNAME',
     email: '$MONGO_INITDB_APPUSER_EMAIL',
     password: '$MONGO_INITDB_APPUSER_HASHED_PASSWORD',
     mobile: '$MONGO_INITDB_APPUSER_MOBILE',
     tokens: [],
     isAdmin: true,
     profile: {
-      isChild: false,
       name: 'Bob',
       gender: '',
       location: '',

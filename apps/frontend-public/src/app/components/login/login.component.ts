@@ -48,22 +48,26 @@ export class LoginComponent implements OnInit {
     const password = this.loginForm.get('password')?.value;
 
     if (username && password) {
-      this.authService.login(username, password).subscribe((loginResponse: LoginResponse) => {
-        console.log(loginResponse);
-        this.router.navigate([CoreConstants.routePath.root]);
-      }, error => {
-        console.error(error);
-        this.loginLoadingSpinner = false;
-        this.loginError = true;
-        this.enableLoginForm();
-        const userErrorMsg = error.message ? error.message + ' (connexion impossible)'
-          : 'Erreur inconnue (connexion impossible)';
-        this.notificationService.sendNotification(
-          userErrorMsg,
-          '',
-          { panelClass: ['failure', 'notification-login-by-username-error'] }
-        );
-      });
+      this.authService.login(username, password).subscribe({
+        next: (loginResponse: LoginResponse) => {
+          console.log(loginResponse);
+          this.router.navigate([CoreConstants.routePath.root]);
+        },
+        error: (e) => {
+          console.error(e);
+          this.loginLoadingSpinner = false;
+          this.loginError = true;
+          this.enableLoginForm();
+          const userErrorMsg = e.message ? e.message + ' (connexion impossible)'
+            : 'Erreur inconnue (connexion impossible)';
+          this.notificationService.sendNotification(
+            userErrorMsg,
+            '',
+            { panelClass: ['failure', 'notification-login-by-username-error'] }
+          );
+        },
+        complete: () => console.log('complete')
+    });
     }
   }
 

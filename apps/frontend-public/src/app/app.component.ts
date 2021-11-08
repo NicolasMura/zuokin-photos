@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from '@zuokin-photos/frontend-tools';
 
 
 @Component({
@@ -8,4 +9,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'frontend-public';
+
+  constructor() {
+    console.log(environment);
+  }
 }

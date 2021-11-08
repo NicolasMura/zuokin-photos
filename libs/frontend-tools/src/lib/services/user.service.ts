@@ -61,7 +61,7 @@ export class UserService extends GlobalService {
   /**
    * Set current user
    */
-  public setCurrentUser(userDecoded: User & { iat: number, exp: number } | null): void {
+  public setCurrentUser(userDecoded: User & { iat: number, exp: number, sub: string } | null): void {
     let user: User | null = null;
     console.log(userDecoded);
 
@@ -74,7 +74,7 @@ export class UserService extends GlobalService {
         userDecoded.isAdmin,
         userDecoded.created_at,
         userDecoded.profile,
-        userDecoded._id
+        userDecoded.sub
       );
     }
     console.log(user);

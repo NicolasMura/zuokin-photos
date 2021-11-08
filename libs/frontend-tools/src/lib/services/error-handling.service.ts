@@ -26,7 +26,7 @@ export class ErrorHandlingService {
 
     userErrorMsg = error.message ?? 'Erreur inconnue';
     errorStatus = error.status ?? 0;
-    errorUrl = error.url ?? 0;
+    errorUrl = error.url ?? '';
 
     switch (errorStatus) {
       // Here we could intercept API errors based on their status code, and show custom messages

@@ -14,7 +14,6 @@ export class AuthValidation {
   createUser(params: User): Joi.ValidationResult {
   // createUser(params: IUserModel): Joi.ValidationResult<IUserModel> {
     const userProfile: Joi.Schema = Joi.object().keys({
-      isChild: Joi.boolean(),
       name: Joi.string(),
       gender: Joi.string(),
       location: Joi.string(),
