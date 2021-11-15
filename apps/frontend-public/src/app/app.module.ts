@@ -9,6 +9,7 @@ import { FrontendToolsModule, TokenInterceptor, WINDOW } from '@zuokin-photos/fr
 import { MaterialModule } from '@zuokin-photos/vendors';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -17,6 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
   declarations: [
     AppComponent,
     LoginComponent,
+    HomeComponent,
     SettingsComponent,
     // IosInstallComponent
   ],

@@ -67,7 +67,6 @@ export class UserService extends GlobalService {
 
     if (userDecoded) {
       user = new User(
-        // userDecoded.userId,
         userDecoded.username,
         userDecoded.email,
         userDecoded.mobile,
