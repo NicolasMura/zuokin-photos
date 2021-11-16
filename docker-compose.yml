@@ -4,7 +4,7 @@ version: "3.7" # specify docker-compose version
 services:
   frontend: # name of Angular app service
     image: nicolasmura/zuokin-photos-frontend-public
-    container_name: frontend-v2
+    container_name: photos-frontend
     env_file:
       - .env
     ports:
@@ -21,7 +21,7 @@ services:
 
   api: # name of Node JS app
     image: nicolasmura/zuokin-photos-backend-api
-    container_name: backend-v2
+    container_name: photos-backend
     env_file:
       - .env
     ports:
@@ -38,9 +38,9 @@ services:
           - database
 
   database: # name of database service
-    # image: nicolasmura/zuokin-photos-database
-    image: zuokin-photos-database
-    container_name: database-v2
+    image: nicolasmura/zuokin-photos-database
+    # image: zuokin-photos-database
+    container_name: photos-database
     env_file:
       - .env
     ports:

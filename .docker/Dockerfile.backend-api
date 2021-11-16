@@ -4,10 +4,10 @@
 FROM node:12-alpine AS development
 
 # Create a directory where our app will be placed
-RUN mkdir -p /usr/family-calendar-v2/backend-api
+RUN mkdir -p /usr/zuokin-photos/backend-api
 
 # Change directory so that our commands run inside this new directory
-WORKDIR /usr/family-calendar-v2/backend-api
+WORKDIR /usr/zuokin-photos/backend-api
 
 # Copy dependency definitions
 COPY package.json yarn.lock ./
@@ -29,10 +29,10 @@ FROM node:12-alpine AS production
 RUN apk add bash nano
 
 # Create a directory where our app will be placed
-RUN mkdir -p /usr/family-calendar-v2/backend-api
+RUN mkdir -p /usr/zuokin-photos/backend-api
 
 # Change directory so that our commands run inside this new directory
-WORKDIR /usr/family-calendar-v2/backend-api
+WORKDIR /usr/zuokin-photos/backend-api
 
 # Install global dependencies
 RUN yarn global add pm2
@@ -43,7 +43,7 @@ COPY package.json yarn.lock ./
 # Install only production dependencies
 RUN yarn install --production --ignore-scripts --network-timeout 60000
 
-# Rebuild bcrypt library (cf. Error: Cannot find module '/usr/family-calendar-v2/backend-api/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node')
+# Rebuild bcrypt library (cf. Error: Cannot find module '/usr/zuokin-photos/backend-api/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node')
 RUN npm rebuild bcrypt --update-binary
 
 # Get all the code needed to run the app
@@ -53,7 +53,7 @@ RUN npm rebuild bcrypt --update-binary
 # COPY . .
 
 # Copy the built /dist folder from the development image
-COPY --from=development /usr/family-calendar-v2/backend-api/dist/apps/backend-api ./dist/apps/backend-api
+COPY --from=development /usr/zuokin-photos/backend-api/dist/apps/backend-api ./dist/apps/backend-api
 
 # Expose the port the app runs in
 EXPOSE 3333

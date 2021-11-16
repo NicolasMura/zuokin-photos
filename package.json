@@ -27,7 +27,10 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "deploy:frontend-public:dockerhub": "nx build frontend-public --prod && docker build -t zuokin-photos-frontend-public -f .docker/Dockerfile.frontend-public . && docker tag zuokin-photos-frontend-public nicolasmura/zuokin-photos-frontend-public && docker push nicolasmura/zuokin-photos-frontend-public",
+    "deploy:backend-api:dockerhub": "docker build -t zuokin-photos-backend-api -f .docker/Dockerfile.backend-api . && docker tag zuokin-photos-backend-api nicolasmura/zuokin-photos-backend-api && docker push nicolasmura/zuokin-photos-backend-api",
+    "deploy:database:dockerhub": "docker build -t zuokin-photos-database -f .docker/Dockerfile.mongodb . --no-cache && docker tag zuokin-photos-database nicolasmura/zuokin-photos-database && docker push nicolasmura/zuokin-photos-database"
   },
   "private": true,
   "dependencies": {
