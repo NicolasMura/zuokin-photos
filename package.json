@@ -7,7 +7,7 @@
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "nx": "nx",
     "start": "yarn start",
-    "start:frontend-public": "nx serve frontend-public  --host 192.168.1.47 --disable-host-check",
+    "start:frontend-public": "nx serve frontend-public",
     "start:backend-api": "nx serve backend-api",
     "build": "ng build",
     "test": "ng test",

@@ -13,6 +13,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatListModule } from '@angular/material/list';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MomentDateModule } from '@angular/material-moment-adapter';
 
 
@@ -48,6 +52,10 @@ export const CUSTOM_DATE_FORMATS = {
     MatSelectModule,
     MatCheckboxModule,
     MatDatepickerModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
+    MatListModule,
+    MatToolbarModule,
     MomentDateModule
   ],
   providers: [

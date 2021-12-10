@@ -20,11 +20,11 @@ export class UserService extends GlobalService {
    * Private current logged user, as a behavior subject so we can provide a default value
    * Nobody outside the UserService should have access to this BehaviorSubject
    */
-  private readonly currentUser: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  private readonly currentUser: BehaviorSubject<User> = new BehaviorSubject<User>(null as any);
   /**
    * Expose the observable$ part of the currentUser subject (read only stream)
    */
-  readonly currentUser$: Observable<User | null> = this.currentUser.asObservable();
+  readonly currentUser$: Observable<User> = this.currentUser.asObservable();
   /**
    * Users
    */
@@ -34,11 +34,11 @@ export class UserService extends GlobalService {
    * Variables representing a part of application state, in a Redux inspired way
    */
   private userStore: {
-    currentUser: User | null,
+    currentUser: User,
     users: User[],
     familyUsers: User[]
   } = {
-    currentUser: null,
+    currentUser: null as any,
     users: [],
     familyUsers: []
   };
@@ -54,7 +54,7 @@ export class UserService extends GlobalService {
   /**
    * Get current user
    */
-  public getCurrentUser(): User | null{
+  public getCurrentUser(): User {
     return this.currentUser.getValue();
   }
 

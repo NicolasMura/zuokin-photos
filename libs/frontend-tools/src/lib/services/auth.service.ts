@@ -65,7 +65,7 @@ export class AuthService extends GlobalService {
         console.log('checkForExistingToken - success login with valid existing token');
         this.startSession(existingToken);
       } else {
-        // console.log('checkForExistingToken - failed to login: got existing token, but expired');
+        console.log('checkForExistingToken - failed to login: got existing token, but expired');
         // // if token is expired, we must cancel session + clear local storage to get a chance to start session next time we login
         // this.logout();
         // this.notificationService.sendNotification('@TODO', '', { duration: 0 });
