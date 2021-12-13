@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Logger } from '@nestjs/common';
-import { IUser, IUserProfile } from "../interfaces/user.interface";
+import { IUser, IUserProfile } from '../interfaces/user.interface';
 
 // export type UserDocument = User & Document; // ??
 
