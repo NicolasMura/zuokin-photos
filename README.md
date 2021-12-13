@@ -317,6 +317,12 @@ Create `auth` module running the 'module' NestJs generator with Nx project suppo
   nx g @nrwl/nest:module auth --project backend-api --directory app
 ```
 
+Create `auth` controller running the 'controller' NestJs generator with Nx project support:
+
+```bash
+  nx g @nrwl/nest:controller auth --project backend-api --directory app/auth  --flat
+```
+
 Create `auth` service inside `auth` module running the 'service' NestJs generator with Nx project support:
 
 ```bash

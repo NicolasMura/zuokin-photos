@@ -1,8 +1,10 @@
-export interface IFilesystemInfos {
+export interface IFileSystemInfos {
   directoryHandle: {
-    webkitRelativePath: string;
-    lastModified: number;
+    kind: string;
+    name: string;
   };
+  webkitRelativePath: string;
+  lastModified: number;
   lastModifiedDate: Date;
   name: string;
   size: number;

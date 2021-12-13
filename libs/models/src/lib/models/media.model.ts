@@ -1,7 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { IMedia } from '../interfaces/media.interface';
-import { IFilesystemInfos } from '../interfaces/media-filesystem-infos.interface';
 import { MediaMetadata } from './media-metadata.model';
 import { FilesystemInfos } from './media-filesystem-infos.model';
 

@@ -1,8 +1,7 @@
-import * as bcrypt from 'bcrypt';
 import { Schema, Prop, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Logger } from '@nestjs/common';
-import { IFilesystemInfos } from '../interfaces/media-filesystem-infos.interface';
+import { IFileSystemInfos } from '../interfaces/media-filesystem-infos.interface';
 
 // export type UserDocument = User & Document; // ??
 
@@ -10,15 +9,21 @@ import { IFilesystemInfos } from '../interfaces/media-filesystem-infos.interface
   versionKey: false,
   _id: false
 })
-export class FilesystemInfos extends Document implements IFilesystemInfos {
+export class FilesystemInfos extends Document implements IFileSystemInfos {
   @Prop(raw({
-    webkitRelativePath: { type: String },
-    lastModified: { type: Number }
+    kind: { type: String },
+    name: { type: String }
   }))
   directoryHandle!: {
-    webkitRelativePath: string;
-    lastModified: number;
+    kind: string;
+    name: string;
   };
+
+  @Prop()
+  webkitRelativePath!: string;
+
+  @Prop()
+  lastModified!: number;
 
   @Prop()
   lastModifiedDate!: Date;

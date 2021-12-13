@@ -1,7 +1,6 @@
 import { IUser, IUserProfile } from '@zuokin-photos/models';
 
 export class User implements IUser {
-  // userId: number;
   username: string;
   email: string;
   mobile: string;
@@ -13,7 +12,6 @@ export class User implements IUser {
   _id?: string;
 
   constructor(
-    // userId: number,
     username: string,
     email: string,
     mobile: string,
@@ -23,7 +21,6 @@ export class User implements IUser {
     // tslint:disable-next-line: variable-name
     _id?: string
   ) {
-    // this.userId = userId;
     this.username = username;
     this.email = email;
     this.mobile = mobile;

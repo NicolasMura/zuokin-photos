@@ -12,17 +12,17 @@ import { User } from '@zuokin-photos/models';
 export class UsersService {
   // private readonly users: User[] = [
   //   {
-  //     userId: 1,
   //     username: 'john',
   //     email: 'john@test.com',
   //     password: 'changeme',
   //     created_at: new Date()
+  //     _id: 1
   //   },
   //   {
-  //     userId: 2,
   //     username: 'maria',
   //     email: 'maria@test.com',
   //     password: 'guess',
+  //     _id: 2
   //   },
   // ];
   private currentUser: User;
@@ -67,8 +67,20 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    // return this.users;
-    return [];
+    const users: User[] = await this.userModel.find()
+    .exec();
+
+    const docResult: User[] = users.map((user: User) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
+
+      const docResult = result['_doc'];
+      delete docResult['password'];
+
+      return docResult;
+    });
+
+    return docResult;
   }
 
   async createUser(user: User): Promise<Partial<User> | undefined> {

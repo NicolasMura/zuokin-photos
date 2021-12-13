@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcrypt';
 import { Schema, Prop, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Logger } from '@nestjs/common';
@@ -10,7 +9,7 @@ import { IMediaMetadata } from '../interfaces/media-metadata.interface';
   versionKey: false,
   _id: false
 })
-export class MediaMetadata extends Document implements MediaMetadata {
+export class MediaMetadata extends Document implements IMediaMetadata {
   @Prop()
   creationTime!: string;
 
@@ -21,8 +20,8 @@ export class MediaMetadata extends Document implements MediaMetadata {
   height!: string;
 
   @Prop(raw({
-    fps: { type: String },
-    status: { type: Number }
+    fps: { type: Number },
+    status: { type: String }
   }))
   video?: {
     fps: number;
@@ -30,12 +29,12 @@ export class MediaMetadata extends Document implements MediaMetadata {
   };
 
   @Prop(raw({
-    cameraMake: { type: Number },
-    cameraModel: { type: Number },
+    cameraMake: { type: String },
+    cameraModel: { type: String },
     focalLength: { type: Number },
     apertureFNumber: { type: Number },
     isoEquivalent: { type: Number },
-    exposureTime: { type: Number }
+    exposureTime: { type: String }
   }))
   photo?: {
     cameraMake: string;

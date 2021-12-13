@@ -3,7 +3,6 @@ import { User } from '@zuokin-photos/frontend-tools';
 
 
 const getDefaults = (): User => ({
-  // userId: 1234,
   username: 'bob',
   email: 'bob@marley.ja',
   mobile: '0123456789',
@@ -14,7 +13,8 @@ const getDefaults = (): User => ({
     gender: 'M',
     location: 'Paris',
     picture: ''
-  }
+  },
+  _id: '61b7c23244fe418be6001a6b'
 });
 
 export const getUserMock = (brand?: Partial<User>): User => ({

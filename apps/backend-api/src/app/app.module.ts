@@ -7,22 +7,26 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       // isGlobal: true,
-      envFilePath: '.env'
+      envFilePath: '.env',
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI') + configService.get<string>('MONGODB_DB_MAIN'),
+        uri:
+          configService.get<string>('MONGODB_URI') +
+          configService.get<string>('MONGODB_DB_MAIN'),
       }),
       inject: [ConfigService],
     }),
     AuthModule,
-    UsersModule
+    UsersModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [

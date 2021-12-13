@@ -32,9 +32,6 @@ export const UserProfileSchema = SchemaFactory.createForClass(UserProfile);
 })
 export class User extends Document implements IUser {
   @Prop()
-  userId!: number;
-
-  @Prop()
   username!: string;
 
   @Prop({ unique: true, required: true })

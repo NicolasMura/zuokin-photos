@@ -6,7 +6,6 @@ export interface IUserProfile {
 }
 
 export interface IUser {
-  // userId: number;
   username: string;
   email: string;
   mobile: string;
