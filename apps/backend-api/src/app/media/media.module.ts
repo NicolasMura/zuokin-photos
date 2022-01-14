@@ -19,9 +19,11 @@ import { editFileName, imageFileFilter } from './utils/file-upload.utils';
       useFactory: async (configService: ConfigService) => ({
         storage: diskStorage({
           destination: (req, file, cb) => {
+            console.log(file);
             const path = `${configService.get<string>(
               'UPLOAD_FOLDER_TMP'
             )}/${file.originalname.split('/').slice(0, -1).join('/')}`;
+            console.log(path);
             if (path) {
               mkdirSync(path, { recursive: true });
             }

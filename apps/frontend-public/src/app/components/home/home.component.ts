@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit {
   public onFileSelected(event: any) {
     const files: File[] = event.target.files;
     console.log(files);
-    this.files = [...files].filter((file: File) => file.name.match(/\.(jpg|jpeg|png|gif)$/));
+    this.files = [...files].filter((file: File) => file.name.match(/\.(jpg|jpeg|png|gif|mp4)$/));
 
     if (files.length > 0) {
       [...files]
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
     }
 
     this.filesInfos = this.filesInfos.filter((fileInfos: { file: File, fileName: string, uploadProgress: number }) =>
-      fileInfos.fileName.match(/\.(jpg|jpeg|png|gif)$/));
+      fileInfos.fileName.match(/\.(jpg|jpeg|png|gif|mp4)$/));
     console.log(this.filesInfos);
   }
 
