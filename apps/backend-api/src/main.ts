@@ -1,11 +1,13 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // get env variables from .env file through ConfigService
   const config =  app.get(ConfigService);
@@ -26,6 +28,12 @@ async function bootstrap() {
       });
     }
   }
+
+  // serve static files
+  console.log(__dirname);
+  console.log(process.cwd());
+  // app.useStaticAssets(join(__dirname, '..', 'files'));
+  app.useStaticAssets(join(process.cwd(), config.get<string>('UPLOAD_FOLDER_TMP')));
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);

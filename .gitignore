@@ -41,6 +41,7 @@ Thumbs.db
 .env
 deploy.sh
 dist-public.tar.gz
+upload
 ssl/fullchain.pem
 ssl/privkey.pem
 scripts/generate-build-infos.js

@@ -13,10 +13,13 @@
 
   // Environment variables
   window.__env.production = false;
+  window.__env.hmr = true;
   window.__env.bob = 'bobby';
   // window.__env.serviceWorkerScript = window.__env.production ? 'sw-master.js' : 'sw-sync.js';
   window.__env.wsEndpoint = ws + '://' + backendHostname;
   window.__env.backendApi = {};
+  window.__env.backendApi.baseUrl              = protocol + '://' + backendHostname + apiPath;
   window.__env.backendApi.baseUrlAuth          = protocol + '://' + backendHostname + apiPath + '/auth';
   window.__env.backendApi.baseUrlUser          = protocol + '://' + backendHostname + apiPath + '/users';
+  window.__env.backendApi.baseUrlMedia         = protocol + '://' + backendHostname + apiPath + '/medias';
 })(this);

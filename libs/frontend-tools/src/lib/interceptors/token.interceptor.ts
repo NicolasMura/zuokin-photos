@@ -15,35 +15,36 @@ export class TokenInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-      if (
-        request.url.indexOf('auth/api/login') > 0
-        || request.url.indexOf('auth/api/signup') > 0
-        || request.url.indexOf('management/api/is-in-maintenance') > 0
-        || request.url.indexOf('opendata.paris.fr') > 0
-      ) {
-        return next.handle(request); // do nothing on the request
+    if (
+      request.url.indexOf('auth/api/login') > 0
+      || request.url.indexOf('auth/api/signup') > 0
+      || request.url.indexOf('management/api/is-in-maintenance') > 0
+    ) {
+      return next.handle(request); // do nothing on the request
+    }
+
+    const jwtToken = this.authService.getToken();
+
+    // if (jwtToken && this.authService.isTokenExpired(jwtToken)) {
+    //   console.log('TokenInterceptor - got token, but expired');
+    //   // @TODO : refresh token (front + back)
+    //   this.authService.logout();
+
+    //   // On affiche la modale de session expirée uniquement si l'application ne vient pas juste de s'ouvrir
+    //   // if (this.userService.getCurrentUser() && !this.authService.timeoutDialogRef) {
+    //   //   this.authService.openTimeoutDialog();
+    //   // }
+    // }
+
+    // console.log(request);
+    // console.log(jwtToken);
+    request = request.clone({
+      setHeaders: {
+        'x-access-token': `${jwtToken}`
       }
+    });
 
-      const jwtToken = this.authService.getToken();
-
-      // if (jwtToken && this.authService.isTokenExpired(jwtToken)) {
-      //   console.log('TokenInterceptor - got token, but expired');
-      //   // @TODO : refresh token (front + back)
-      //   this.authService.logout();
-
-      //   // On affiche la modale de session expirée uniquement si l'application ne vient pas juste de s'ouvrir
-      //   // if (this.userService.getCurrentUser() && !this.authService.timeoutDialogRef) {
-      //   //   this.authService.openTimeoutDialog();
-      //   // }
-      // }
-
-      request = request.clone({
-        setHeaders: {
-          'x-access-token': `${jwtToken}`
-        }
-      });
-
-      return next.handle(request);
+    return next.handle(request);
   }
 
 }

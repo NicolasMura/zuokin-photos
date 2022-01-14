@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { IMedia } from '../interfaces/media.interface';
 import { MediaMetadata } from './media-metadata.model';
-import { FilesystemInfos } from './media-filesystem-infos.model';
+import { MediaFileSystemInfos } from './media-filesystem-infos.model';
 
 @Schema({
   collection: 'medias',
@@ -25,7 +25,7 @@ export class Media extends Document implements IMedia {
   mediaMetadata?: MediaMetadata;
 
   @Prop()
-  fileSystemInfos!: FilesystemInfos;
+  fileSystemInfos!: MediaFileSystemInfos;
 
   @Prop()
   filename!: string;

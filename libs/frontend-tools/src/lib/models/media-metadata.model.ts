@@ -1,4 +1,6 @@
-export class IMediaMetadata {
+import { IMediaMetadata } from '@zuokin-photos/models';
+
+export class MediaMetadata implements IMediaMetadata {
   constructor(
     public creationTime: string,
     public width: string,

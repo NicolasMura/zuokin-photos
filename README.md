@@ -172,8 +172,8 @@ To get latest images:
 
 ```bash
   docker pull nicolasmura/zuokin-photos-frontend-public \
-  docker pull nicolasmura/zuokin-photos-backend-api \
-  docker pull nicolasmura/zuokin-photos-database
+    docker pull nicolasmura/zuokin-photos-backend-api \
+    docker pull nicolasmura/zuokin-photos-database
 ```
 
 # Deploy in a real-world production environment

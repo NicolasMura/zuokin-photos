@@ -1,7 +1,6 @@
 import { Schema, Prop, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Logger } from '@nestjs/common';
-import { IFileSystemInfos } from '../interfaces/media-filesystem-infos.interface';
+import { IMediaFileSystemInfos } from '../interfaces/media-filesystem-infos.interface';
 
 // export type UserDocument = User & Document; // ??
 
@@ -9,7 +8,7 @@ import { IFileSystemInfos } from '../interfaces/media-filesystem-infos.interface
   versionKey: false,
   _id: false
 })
-export class FilesystemInfos extends Document implements IFileSystemInfos {
+export class MediaFileSystemInfos extends Document implements IMediaFileSystemInfos {
   @Prop(raw({
     kind: { type: String },
     name: { type: String }
@@ -38,7 +37,7 @@ export class FilesystemInfos extends Document implements IFileSystemInfos {
   type!: string;
 }
 
-export const FilesystemInfosSchema = SchemaFactory.createForClass(FilesystemInfos);
+export const MediaFileSystemInfosSchema = SchemaFactory.createForClass(MediaFileSystemInfos);
 
 // Ex.:
 // {

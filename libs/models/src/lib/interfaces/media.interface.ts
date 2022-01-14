@@ -1,4 +1,4 @@
-import { IFileSystemInfos } from './media-filesystem-infos.interface';
+import { IMediaFileSystemInfos } from './media-filesystem-infos.interface';
 import { IMediaMetadata } from './media-metadata.interface';
 
 export interface IMedia {
@@ -6,6 +6,6 @@ export interface IMedia {
   baseUrl: string;
   mimeType: string;
   mediaMetadata?: IMediaMetadata;
-  fileSystemInfos: IFileSystemInfos;
+  fileSystemInfos: IMediaFileSystemInfos;
   filename: string;
 }

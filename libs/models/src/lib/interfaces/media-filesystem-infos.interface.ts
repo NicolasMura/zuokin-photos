@@ -1,7 +1,7 @@
-export interface IFileSystemInfos {
+export interface IMediaFileSystemInfos {
   directoryHandle: {
-    kind: string;
-    name: string;
+    kind: string | undefined;
+    name: string | undefined;
   };
   webkitRelativePath: string;
   lastModified: number;

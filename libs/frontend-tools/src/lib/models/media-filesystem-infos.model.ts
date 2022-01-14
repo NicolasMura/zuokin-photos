@@ -1,10 +1,10 @@
-import { IFileSystemInfos } from "@zuokin-photos/models";
+import { IMediaFileSystemInfos } from '@zuokin-photos/models';
 
-export class FilesystemInfos implements IFileSystemInfos {
+export class MediaFileSystemInfos implements IMediaFileSystemInfos {
   constructor(
     public directoryHandle: {
-      kind: string;
-      name: string;
+      kind: string | undefined;
+      name: string | undefined;
     },
     public webkitRelativePath: string,
     public lastModified: number,

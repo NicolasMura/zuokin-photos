@@ -1,6 +1,5 @@
 import { Schema, Prop, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Logger } from '@nestjs/common';
 import { IMediaMetadata } from '../interfaces/media-metadata.interface';
 
 // export type UserDocument = User & Document; // ??

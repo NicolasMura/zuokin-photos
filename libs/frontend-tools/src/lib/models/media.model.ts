@@ -1,4 +1,6 @@
-import { IMedia, MediaMetadata, FilesystemInfos } from "@zuokin-photos/models";
+import { IMedia } from '@zuokin-photos/models';
+import { MediaMetadata, MediaFileSystemInfos } from '@zuokin-photos/frontend-tools';
+import { environment } from '@zuokin-photos/frontend-tools';
 
 export class Media implements IMedia {
   constructor(
@@ -6,12 +8,12 @@ export class Media implements IMedia {
     public baseUrl: string,
     public mimeType: string,
     public mediaMetadata: MediaMetadata,
-    public fileSystemInfos: FilesystemInfos,
+    public fileSystemInfos: MediaFileSystemInfos,
     public filename: string,
     // tslint:disable-next-line: variable-name
     public _id?: string
   ) {
-    this.productUrl = productUrl;
+    this.productUrl = `${environment.backendApi.baseUrl}/photo/${_id}`;
     this.baseUrl = baseUrl;
     this.mimeType = mimeType;
     this.mediaMetadata = mediaMetadata;

@@ -7,9 +7,13 @@ export * from './lib/components/something-is-broken/something-is-broken.componen
 export * from './lib/guards/auth.guard';
 export * from './lib/interceptors/token.interceptor';
 export * from './lib/models/user.model';
+export * from './lib/models/media.model';
+export * from './lib/models/media-metadata.model';
+export * from './lib/models/media-filesystem-infos.model';
 export * from './lib/services/auth.service';
 export * from './lib/services/error-handling.service';
 export * from './lib/services/global-service.service';
 export * from './lib/services/notification.service';
 export * from './lib/services/user.service';
+export * from './lib/services/media.service';
 export * from './lib/services/utilities.service';

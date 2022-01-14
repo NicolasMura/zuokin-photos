@@ -2,6 +2,7 @@ const apiPath = '/api';
 
 export const environment = {
   production: (window as any).__env?.production || false,
+  hmr: (window as any).__env?.hmr || false,
   bob: (window as any).__env?.bob || 'undefined',
   // hmr: true,
   // envName: 'local',
@@ -14,8 +15,10 @@ export const environment = {
 
   wsEndpoint: (window as any).__env?.wsEndpoint || 'undefined',
   backendApi: {
+    baseUrl:              (window as any).__env?.backendApi?.baseUrl || 'undefined',
     baseUrlAuth:          (window as any).__env?.backendApi?.baseUrlAuth || 'undefined',
     baseUrlUser:          (window as any).__env?.backendApi?.baseUrlUser || 'undefined',
+    baseUrlMedia:         (window as any).__env?.backendApi?.baseUrlMedia || 'undefined',
   },
 };
 

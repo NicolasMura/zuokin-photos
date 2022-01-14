@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { Media, MediaMetadata, FilesystemInfos } from '@zuokin-photos/models';
+import { Media } from '@zuokin-photos/models';
 
 /**
 * @export

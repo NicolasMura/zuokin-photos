@@ -1,18 +1,18 @@
 import { Controller, Get, Logger, Param, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(
     private usersService: UsersService
   ) {}
 
-  @Get('users/:id')
+  @Get(':id')
   async findOne(@Param('id') id: number) {
     return this.usersService.findUserById(id);
   }
 
-  @Get('profile')
+  @Get('current')
   getProfile(@Request() req) {
     Logger.log('**************');
     Logger.log(req.user);
@@ -20,7 +20,7 @@ export class UsersController {
     return this.usersService.getCurrentUser();
   }
 
-  @Get('users')
+  @Get('')
   getUsers(@Request() req) {
     Logger.log('**************');
     Logger.log(req.user);
