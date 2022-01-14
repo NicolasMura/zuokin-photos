@@ -1,6 +1,51 @@
-<button mat-flat-button color="primary" aria-label="login"
+<!-- <button mat-flat-button color="primary" aria-label="login"
         (click)=openDirectory()
         [class.mc-spinner]="loginLoadingSpinner">
   Open directory
+</button> -->
+
+<!-- <input type="file" id="filepicker" name="fileList" webkitdirectory  /> -->
+<!-- <input type="file" class="file-upload" (change)="showFiles($event)" multiple>
+<ul id="listing"></ul> -->
+
+<input type="file" class="file-input"
+       (change)="onFileSelected($event)" #selectFiles webkitdirectory>
+<!-- <input type="file" class="file-input"
+       (change)="onFileSelected($event)" #selectFiles> -->
+
+<button mat-mini-fab color="primary" class="upload-btn"
+       (click)="selectFiles.click()" #selectFilePretty>
+  <mat-icon>attach_file</mat-icon>
 </button>
 
+<div class="file-upload">
+  <pre *ngFor="let fileInfos of filesInfos">
+    {{ fileInfos.fileName | json }}
+
+    <mat-progress-bar class="progress-bar" mode="determinate"
+                      [value]="fileInfos.uploadProgress" *ngIf="fileInfos.uploadProgress">
+    </mat-progress-bar>
+  </pre>
+  <pre *ngIf="filesInfos?.length === 0">
+    No file selected yet.
+  </pre>
+
+  <button mat-mini-fab color="primary" class="upload-btn"
+          [disabled]="filesInfos.length === 0"
+          (click)="uploadSelectedFiles()">
+      <mat-icon>file_upload</mat-icon>
+  </button>
+</div>
+
+<div class="progress">
+
+  <!-- <mat-progress-bar class="progress-bar" mode="determinate"
+                    [value]="uploadProgress" *ngIf="uploadProgress">
+  </mat-progress-bar> -->
+
+  <mat-icon class="cancel-upload" (click)="cancelUpload()"
+            *ngIf="uploadProgress">delete_forever</mat-icon>
+
+</div>
+
+<img src="http://localhost:3333/subfolder/anotherfolder/IMG_20210103_135639.jpg" alt="" style="width: 100%">
