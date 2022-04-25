@@ -16,7 +16,7 @@ import * as ExifReader from 'exifreader';
 @Component({
   selector: 'zphotos-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   loginLoadingSpinner = false;

@@ -25,6 +25,10 @@
       </mat-toolbar>
 
       <main [ngClass]="{'isLogged': currentUser$ | async}">
+        <zphotos-something-is-broken *ngIf="errors.somethingIsBroken.statusCode">
+                                     [statusCode]="errors.somethingIsBroken.statusCode"
+                                     [statusMessage]="errors.somethingIsBroken.statusMessage"
+        </zphotos-something-is-broken>
         <router-outlet #o="outlet"></router-outlet>
       </main>
 

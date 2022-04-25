@@ -24,6 +24,21 @@ export class AppComponent implements OnInit {
    * Observable that gives current user
    */
   public currentUser$: Observable<User>;
+  public isRefreshing = true;
+  /**
+   * Error management
+   */
+  public errors: {
+    somethingIsBroken: {
+      statusCode: string,
+      statusMessage: string
+    }
+  } = {
+    somethingIsBroken: {
+      statusCode: '',
+      statusMessage: ''
+    }
+  };
 
   constructor(
     public router: Router,
@@ -80,12 +95,19 @@ export class AppComponent implements OnInit {
   }
 
   public getAllMedias(): void {
-    this.mediaService.getAllMediasTest().then((medias: Media[]) => {
-      console.log(medias);
-      medias.forEach((media: Media) => {
-        console.log(media.mediaMetadata?.tags?.get('ExifReaderTags'));
+    this.mediaService.getAllMediasTest()
+      .then((medias: Media[]) => {
+        console.log(medias);
+        medias.forEach((media: Media) => {
+          console.log(media.mediaMetadata?.tags?.get('ExifReaderTags'));
+        })
       })
-    });
+      .finally(() => this.isRefreshing = false)
+      .catch(error => {
+        console.error(error);
+        this.errors.somethingIsBroken.statusCode = error.status && error.status !== 0 ? error.status.toString() : '0';
+        this.errors.somethingIsBroken.statusMessage = error.message ? error.message : 'Unknown error';
+      });
   }
 }
 

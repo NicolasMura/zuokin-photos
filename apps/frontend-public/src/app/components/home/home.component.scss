@@ -1,3 +1,5 @@
+@import 'app-skeletons';
+
 $toolbarHeight: 64px;
 $actionsbarHeight: 64px;
 
@@ -12,6 +14,12 @@ $actionsbarHeight: 64px;
     color: #000000de;
     display: flex;
     flex-direction: column;
+
+    .skeleton {
+      @include background-skeleton;
+      width: 100px;
+      height: 100px;
+    }
   }
 
   .file-input {

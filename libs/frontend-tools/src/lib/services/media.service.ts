@@ -22,9 +22,9 @@ export class MediaService extends GlobalService {
    * Variable representing a part of application state, in a Redux inspired way
    */
   private mediaStore: {
-    medias: Media[]
+    medias: Media[] | null
   } = {
-    medias: []
+    medias: null
   };
 
   constructor(
@@ -39,7 +39,7 @@ export class MediaService extends GlobalService {
   /**
    * Get all medias
    */
-  public getMedias(): Media[] {
+  public getMedias(): Media[] | null {
     return this.mediaStore.medias;
   }
 
@@ -78,6 +78,7 @@ export class MediaService extends GlobalService {
     const source$ = this.http.get<Media[]>(url)
       .pipe(
         delay(1000),
+        timeout(10000),
         map((medias: Media[]) => {
           const mediasWellFormatted = medias.map((media: Media) => {
             const mediaMetadata = new MediaMetadata(
