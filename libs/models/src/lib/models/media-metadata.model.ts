@@ -18,6 +18,9 @@ export class MediaMetadata extends Document implements IMediaMetadata {
   @Prop()
   height!: string;
 
+  @Prop()
+  tags!: Map<string, any>;
+
   @Prop(raw({
     fps: { type: Number },
     status: { type: String }

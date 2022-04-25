@@ -1,4 +1,4 @@
-# must be defined in backend/.env
+# must be defined in .env
 
 version: "3.7"
 

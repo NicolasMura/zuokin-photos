@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
           );
         },
         complete: () => console.log('complete')
-    });
+      });
     }
   }
 

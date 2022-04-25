@@ -10,19 +10,18 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <mat-toolbar color="primary" *ngIf="currentUser$ | async" style="background-color: white; color: #2E2E2E;">
+      <mat-toolbar color="primary" *ngIf="currentUser$ | async" class="shadow" style="background-color: white; color: #2E2E2E;">
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
-        <!-- <h1>{{ (currentMoment$ | async)?.month() }} - V17</h1> -->
-        <h1 style="margin-left: 10px; font-size: 24px; display: flex;">Zuokin Photos</h1>
+        <h1 (click)="goToGallery()" style="margin-left: 10px; font-size: 24px; display: flex;">Zuokin Photos</h1>
         <span style="flex: 1 1 auto;"></span>
-        <!-- <button mat-icon-button (click)="refreshApp()">
-          <mat-icon>refresh</mat-icon>
+        <button mat-icon-button (click)="goToSettings()">
+          <mat-icon>settings</mat-icon>
         </button>
-        <button mat-icon-button *ngIf="router.url.split('?')[0] === '/';" (click)="goToToday()">
-          <mat-icon>today</mat-icon>
-        </button> -->
+        <button mat-icon-button (click)="goToAccount()">
+          <mat-icon>manage_accounts</mat-icon>
+        </button>
       </mat-toolbar>
 
       <main [ngClass]="{'isLogged': currentUser$ | async}">

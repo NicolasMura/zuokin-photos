@@ -7,7 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { FrontendToolsModule, TokenInterceptor, WINDOW } from '@zuokin-photos/frontend-tools';
 import { MaterialModule } from '@zuokin-photos/vendors';
-import { AppComponent } from './app.component';
+import { AppComponent, NavigationService } from './app.component';
+import { RetainScrollPolyfillModule } from './modules/retain-scroll-polyfill/retain-scroll-polyfill.module';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { SettingsComponent } from './components/settings/settings.component';
@@ -32,6 +33,12 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClientModule,
     // ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     // ServiceWorkerModule.register(environment.serviceWorkerScript),
+    RetainScrollPolyfillModule.forRoot({
+			// Tell the polyfill how long to poll the document after a route change in
+			// order to look for elements that need to be restored to a previous offset.
+			pollDuration: 3000,
+			pollCadence: 50
+		}),
     NgxWebstorageModule.forRoot(),
     // SwiperModule,
     AppRoutingModule,
@@ -39,6 +46,11 @@ import { AppRoutingModule } from './app-routing.module';
     MaterialModule
   ],
   providers: [
+    NavigationService,
+    {
+      provide: WINDOW,
+      useFactory: () => window
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

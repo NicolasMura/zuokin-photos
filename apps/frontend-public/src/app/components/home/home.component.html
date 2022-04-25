@@ -1,51 +1,81 @@
-<!-- <button mat-flat-button color="primary" aria-label="login"
-        (click)=openDirectory()
-        [class.mc-spinner]="loginLoadingSpinner">
-  Open directory
-</button> -->
+<div class="page-gallery">
 
-<!-- <input type="file" id="filepicker" name="fileList" webkitdirectory  /> -->
-<!-- <input type="file" class="file-upload" (change)="showFiles($event)" multiple>
-<ul id="listing"></ul> -->
+  <!-- <button mat-flat-button color="primary" aria-label="login"
+          (click)=openDirectory()
+          [class.mc-spinner]="loginLoadingSpinner">
+    Open directory
+  </button> -->
 
-<input type="file" class="file-input"
-       (change)="onFileSelected($event)" #selectFiles webkitdirectory>
-<!-- <input type="file" class="file-input"
-       (change)="onFileSelected($event)" #selectFiles> -->
+  <!-- <input type="file" id="filepicker" name="fileList" webkitdirectory  /> -->
+  <!-- <input type="file" class="file-upload" (change)="showFiles($event)" multiple>
+  <ul id="listing"></ul> -->
 
-<button mat-mini-fab color="primary" class="upload-btn"
-       (click)="selectFiles.click()" #selectFilePretty>
-  <mat-icon>attach_file</mat-icon>
-</button>
+  <div class="gallery">
+    <div *ngFor="let media of mediaService.getMedias()">
+      <img *ngIf="media.mediaMetadata.photo" [src]="media.productUrl" alt="" style="width: 20%">
+      <video *ngIf="media.mediaMetadata.video" controls width="250">
+        <!-- <source src="/media/cc0-videos/flower.webm"
+                type="video/webm"> -->
+        <source [src]="media.productUrl"
+                type="video/mp4">
+        Sorry, your browser doesn't support embedded videos.
+      </video>
+    </div>
 
-<div class="file-upload">
-  <pre *ngFor="let fileInfos of filesInfos">
-    {{ fileInfos.fileName | json }}
+    <input type="file" class="file-input"
+          (change)="onFileSelected($event)" #selectFiles webkitdirectory>
+    <!-- <input type="file" class="file-input"
+          (change)="onFileSelected($event)" #selectFiles> -->
 
-    <mat-progress-bar class="progress-bar" mode="determinate"
-                      [value]="fileInfos.uploadProgress" *ngIf="fileInfos.uploadProgress">
-    </mat-progress-bar>
-  </pre>
-  <pre *ngIf="filesInfos?.length === 0">
-    No file selected yet.
-  </pre>
+    <button mat-mini-fab color="primary" class="upload-btn"
+          (click)="selectFiles.click()" #selectFilePretty>
+      <mat-icon>attach_file</mat-icon>
+    </button>
 
-  <button mat-mini-fab color="primary" class="upload-btn"
-          [disabled]="filesInfos.length === 0"
-          (click)="uploadSelectedFiles()">
-      <mat-icon>file_upload</mat-icon>
-  </button>
+    <div class="file-upload">
+      <div *ngFor="let fileInfos of filesInfos">
+        <img *ngIf="fileInfos.media.mediaMetadata.photo" [src]="fileInfos.testThumbnail" alt="">
+        <video *ngIf="fileInfos.media.mediaMetadata.video" controls width="250">
+          <!-- <source src="/media/cc0-videos/flower.webm"
+                  type="video/webm"> -->
+          <source [src]="fileInfos.testThumbnail"
+                  type="video/mp4">
+          Sorry, your browser doesn't support embedded videos.
+        </video>
+        <pre>
+          {{ fileInfos.fileName | json }}
+          <mat-progress-bar class="progress-bar" mode="determinate"
+                            [value]="fileInfos.uploadProgress" *ngIf="fileInfos.uploadProgress">
+          </mat-progress-bar>
+        </pre>
+      </div>
+      <pre *ngIf="filesInfos?.length === 0">
+        No file selected yet.
+      </pre>
+
+      <button mat-mini-fab color="primary" class="upload-btn"
+              [disabled]="filesInfos.length === 0"
+              (click)="uploadSelectedFiles()">
+          <mat-icon>file_upload</mat-icon>
+      </button>
+    </div>
+
+    <div class="progress">
+
+      <!-- <mat-progress-bar class="progress-bar" mode="determinate"
+                        [value]="uploadProgress" *ngIf="uploadProgress">
+      </mat-progress-bar> -->
+
+      <mat-icon class="cancel-upload" (click)="cancelUpload()"
+                *ngIf="uploadProgress">delete_forever</mat-icon>
+
+    </div>
+  </div>
+
+  <div class="tabs">
+    Todo
+  </div>
+
+  <!-- <img src="http://localhost:3333/anotherfolder/IMG_20210103_135639.jpg" alt="" style="width: 100%"> -->
+
 </div>
-
-<div class="progress">
-
-  <!-- <mat-progress-bar class="progress-bar" mode="determinate"
-                    [value]="uploadProgress" *ngIf="uploadProgress">
-  </mat-progress-bar> -->
-
-  <mat-icon class="cancel-upload" (click)="cancelUpload()"
-            *ngIf="uploadProgress">delete_forever</mat-icon>
-
-</div>
-
-<img src="http://localhost:3333/subfolder/anotherfolder/IMG_20210103_135639.jpg" alt="" style="width: 100%">

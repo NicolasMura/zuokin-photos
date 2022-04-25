@@ -50,7 +50,7 @@ export class MediaController {
   @Post('')
   async createMedia(@Body() media: Media) {
     console.log(media);
-    // return this.mediaService.createMedia(media);
+    return this.mediaService.createMedia(media);
   }
 
   // @Public()

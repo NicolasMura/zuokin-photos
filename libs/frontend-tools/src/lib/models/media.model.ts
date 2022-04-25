@@ -13,10 +13,19 @@ export class Media implements IMedia {
     // tslint:disable-next-line: variable-name
     public _id?: string
   ) {
-    this.productUrl = `${environment.backendApi.baseUrl}/photo/${_id}`;
+    // this.productUrl = `${environment.staticAssets}/${fileSystemInfos.webkitRelativePath}`;
+    this.productUrl = productUrl;
     this.baseUrl = baseUrl;
     this.mimeType = mimeType;
     this.mediaMetadata = mediaMetadata;
+    // this.mediaMetadata = new MediaMetadata(
+    //   mediaMetadata.creationTime,
+    //   mediaMetadata.width,
+    //   mediaMetadata.height,
+    //   mediaMetadata.tags,
+    //   mediaMetadata.video,
+    //   mediaMetadata.photo
+    // );
     this.fileSystemInfos = fileSystemInfos;
     this.filename = filename;
     this._id = _id;

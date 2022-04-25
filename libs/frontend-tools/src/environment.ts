@@ -13,6 +13,7 @@ export const environment = {
   // enabledCache: false, // enable cache management (application + localStorage)
   serviceWorkerScript: (window as any).__env?.serviceWorkerScript || 'undefined',
 
+  staticAssets: (window as any).__env?.staticAssets || 'undefined',
   wsEndpoint: (window as any).__env?.wsEndpoint || 'undefined',
   backendApi: {
     baseUrl:              (window as any).__env?.backendApi?.baseUrl || 'undefined',

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent } from '@angular/common/http';
-import { Observable, Subscription } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
+import { firstValueFrom, Observable, Subscription } from 'rxjs';
 import { catchError, delay, map, timeout, finalize } from 'rxjs/operators';
-import { environment, NotificationService, ErrorHandlingService, Media } from '@zuokin-photos/frontend-tools';
+import { environment, NotificationService, ErrorHandlingService, Media, MediaMetadata } from '@zuokin-photos/frontend-tools';
 import { GlobalService } from './global-service.service'; // strangely weird, but need to be imported like this...
 
 
@@ -18,7 +19,7 @@ export class MediaService extends GlobalService {
   uploadSub!: Subscription;
 
   /**
-   * Variables representing a part of application state, in a Redux inspired way
+   * Variable representing a part of application state, in a Redux inspired way
    */
   private mediaStore: {
     medias: Media[]
@@ -28,6 +29,7 @@ export class MediaService extends GlobalService {
 
   constructor(
     private http: HttpClient,
+    private domSanitizer: DomSanitizer,
     protected notificationService: NotificationService,
     protected errorHandlingService: ErrorHandlingService
   ) {
@@ -49,31 +51,74 @@ export class MediaService extends GlobalService {
     return this.http.get<Media[]>(url)
       .pipe(
         delay(1000),
-        // map((users: User[]) => {
-        //   const usersWellFormatted = users.map((user: User) => new User(
-        //     user.username || '',
-        //     user.email,
-        //     user.mobile || '',
-        //     user.isAdmin,
-        //     user.created_at,
-        //     user.profile,
-        //     user._id
-        //   ));
+        map((medias: Media[]) => {
+          const mediasWellFormatted = medias.map((media: Media) => new Media(
+            media.productUrl,
+            media.baseUrl,
+            media.mimeType,
+            media.mediaMetadata,
+            media.fileSystemInfos,
+            media.filename,
+            media._id
+          ));
 
-        //   this.users = usersWellFormatted;
-        //   this.userStore.users = usersWellFormatted;
+          this.mediaStore.medias = mediasWellFormatted;
 
-        //   return usersWellFormatted;
-        // }),
+          return mediasWellFormatted;
+        }),
         catchError(error => this.handleError(error))
       );
+  }
+
+  /**
+   * Get all medias from backend
+   */
+  public async getAllMediasTest(): Promise<Media[]> {
+    const url = `${this.baseUrlMedia}`;
+    const source$ = this.http.get<Media[]>(url)
+      .pipe(
+        delay(1000),
+        map((medias: Media[]) => {
+          const mediasWellFormatted = medias.map((media: Media) => {
+            const mediaMetadata = new MediaMetadata(
+              media.mediaMetadata.creationTime,
+              media.mediaMetadata.width,
+              media.mediaMetadata.height,
+              media.mediaMetadata.tags,
+              media.mediaMetadata.video,
+              media.mediaMetadata.photo
+            );
+
+            const thumbnail = (media.mediaMetadata?.tags as any)?.ExifReaderTags?.Thumbnail?.base64;
+
+            return new Media(
+              // media.productUrl,
+              thumbnail ? this.domSanitizer.bypassSecurityTrustUrl('data:image/png;base64, ' + thumbnail) as any : media.productUrl,
+              media.baseUrl,
+              media.mimeType,
+              mediaMetadata,
+              media.fileSystemInfos,
+              media.filename,
+              media._id
+            )
+          });
+
+          this.mediaStore.medias = mediasWellFormatted;
+          console.log(mediasWellFormatted);
+
+          return mediasWellFormatted;
+        }),
+        catchError(error => this.handleError(error))
+      );
+
+    return await firstValueFrom(source$);
   }
 
   /**
    * Upload muliple medias to backend
    */
   // updloadMedias(formData: FormData): Observable<any[]> {
-  updloadMedias(formData: FormData): Observable<any> {
+  public updloadMedias(formData: FormData): Observable<any> {
     // const url = `${this.baseUrlMedia}/upload`;
     const url = `${this.baseUrlMedia}/upload-multiple`;
     return this.http.post<HttpEvent<any>>(
@@ -90,6 +135,32 @@ export class MediaService extends GlobalService {
       finalize(() => this.reset()),
       catchError(error => this.handleError(error))
     );
+  }
+
+  /**
+   * Create medias
+   */
+  public async createMedia(media: Media): Promise<any> {
+    console.log(media);
+    const mediaForUpload = {...media} as any;
+    if (media.mediaMetadata.photo) {
+      mediaForUpload.mediaMetadata.tags = Object.fromEntries(mediaForUpload.mediaMetadata?.tags);
+    }
+    console.log(media);
+
+    const url = `${this.baseUrlMedia}`;
+    const source$ = this.http.post<HttpEvent<any>>(
+      url,
+      mediaForUpload
+    )
+    .pipe(
+      // delay(1000),
+      // timeout(5000),
+      finalize(() => this.reset()),
+      catchError(error => this.handleError(error))
+    );
+
+    return await firstValueFrom(source$);
   }
 
   reset() {
