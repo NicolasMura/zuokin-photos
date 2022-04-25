@@ -4,7 +4,13 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'zphotos-settings',
   template: `
-    <div>Settings page</div>
+    <div class="page gallery">
+
+      <div class="content">
+        <div>Settings page</div>
+      </div>
+
+    </div>
   `,
   // styleUrls: ['./settings.component.scss']
 })

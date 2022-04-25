@@ -3,8 +3,8 @@
     <mat-sidenav #sidenav mode="over"
                  [fixedInViewport]="true">
       <mat-nav-list *ngIf="currentUser$ | async">
-        <!-- <a mat-list-item (click)="sidenav.toggle(); goToSettings();" *ngIf="(currentUser$ | async)?.email === 'nicolas.mura@gmail.com'">Settings (soon...)</a> -->
-        <a mat-list-item disabled *ngIf="(currentUser$ | async)?.email === 'nicolas.mura@gmail.com'">V17</a>
+        <!-- <a mat-list-item (click)="sidenav.toggle(); goToSettings();" *ngIf="(currentUser$ | async)?.email === 'contact@nicolasmura.fr'">Settings (soon...)</a> -->
+        <a mat-list-item disabled *ngIf="(currentUser$ | async)?.email === 'contact@nicolasmura.fr'">V17</a>
         <a mat-list-item (click)="sidenav.toggle(); logout()"><mat-icon style="margin-right: 10px;">logout</mat-icon>Déconnexion</a>
       </mat-nav-list>
     </mat-sidenav>
@@ -30,6 +30,10 @@
                                      [statusMessage]="errors.somethingIsBroken.statusMessage"
         </zphotos-something-is-broken>
         <router-outlet #o="outlet"></router-outlet>
+
+        <div class="tabs">
+          Todo
+        </div>
       </main>
 
     </mat-sidenav-content>

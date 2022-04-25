@@ -3,17 +3,14 @@
 $toolbarHeight: 64px;
 $actionsbarHeight: 64px;
 
-.page-gallery {
-  position: relative;
-  background-color: white;
-
-  .gallery {
-    height: calc(100vh - #{$actionsbarHeight} - #{$toolbarHeight});
-    overflow-y: scroll;
-    padding: 20px;
-    color: #000000de;
-    display: flex;
-    flex-direction: column;
+.gallery {
+  .content {
+    // .medias-container {
+    //   display: grid;
+    //   grid-template-columns: repeat(3, 1fr);
+    //   grid-template-rows: repeat(3, 5vw);
+    //   grid-gap: 15px;
+    // }
 
     .skeleton {
       @include background-skeleton;
@@ -24,14 +21,5 @@ $actionsbarHeight: 64px;
 
   .file-input {
     display: none;
-  }
-
-  .tabs {
-    height: $actionsbarHeight;
-    position: fixed;
-    bottom: 0px;
-    width: 100%;
-    padding: 0px 12px;
-    background-color: #303030;
   }
 }

@@ -1,17 +1,17 @@
-<div class="page-gallery">
+<div class="page gallery">
 
-  <!-- <button mat-flat-button color="primary" aria-label="login"
-          (click)=openDirectory()
-          [class.mc-spinner]="loginLoadingSpinner">
-    Open directory
-  </button> -->
+  <div class="content">
+    <!-- <button mat-flat-button color="primary" aria-label="login"
+            (click)=openDirectory()
+            [class.mc-spinner]="loginLoadingSpinner">
+      Open directory
+    </button> -->
 
-  <!-- <input type="file" id="filepicker" name="fileList" webkitdirectory  /> -->
-  <!-- <input type="file" class="file-upload" (change)="showFiles($event)" multiple>
-  <ul id="listing"></ul> -->
+    <!-- <input type="file" id="filepicker" name="fileList" webkitdirectory  />
+    <input type="file" class="file-upload" (change)="showFiles($event)" multiple>
+    <ul id="listing"></ul> -->
 
-  <div class="gallery">
-    <div *ngIf="mediaService.getMedias(); else skeleton">
+    <div *ngIf="mediaService.getMedias(); else skeleton" class="medias-container">
       <div *ngFor="let media of mediaService.getMedias()">
         <img *ngIf="media.mediaMetadata.photo" [src]="media.productUrl" alt="" style="width: 20%">
         <video *ngIf="media.mediaMetadata.video" controls width="250">
@@ -73,16 +73,12 @@
       </div>
     </div>
 
-    <ng-template #skeleton>
+    <ng-template #skeleton class="medias-container">
       <div *ngFor="let i of [0, 1, 2, 3, 4, 5]" class="skeleton">
       </div>
     </ng-template>
-  </div>
 
-  <div class="tabs">
-    Todo
+    <!-- <img src="http://localhost:3333/anotherfolder/IMG_20210103_135639.jpg" alt="" style="width: 100%"> -->
   </div>
-
-  <!-- <img src="http://localhost:3333/anotherfolder/IMG_20210103_135639.jpg" alt="" style="width: 100%"> -->
 
 </div>

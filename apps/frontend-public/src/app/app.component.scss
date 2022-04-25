@@ -1,4 +1,5 @@
 $toolbarHeight: 64px;
+$actionsbarHeight: 64px;
 
 .app-root {
   display: flex;
@@ -39,6 +40,33 @@ $toolbarHeight: 64px;
           height: calc(100vh - #{$toolbarHeight});
           margin-top: $toolbarHeight;
         }
+
+        .tabs {
+          height: $actionsbarHeight;
+          position: fixed;
+          bottom: 0px;
+          width: 100%;
+          padding: 0px 12px;
+          background-color: #303030;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep {
+  main {
+    .page {
+      position: relative;
+      background-color: white;
+
+      .content {
+        height: calc(100vh - #{$actionsbarHeight} - #{$toolbarHeight});
+        overflow-y: scroll;
+        padding: 20px;
+        color: #000000de;
+        display: flex;
+        flex-direction: column;
       }
     }
   }
