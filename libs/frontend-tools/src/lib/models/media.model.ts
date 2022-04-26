@@ -13,8 +13,7 @@ export class Media implements IMedia {
     // tslint:disable-next-line: variable-name
     public _id?: string
   ) {
-    // this.productUrl = `${environment.staticAssets}/${fileSystemInfos.webkitRelativePath}`;
-    this.productUrl = productUrl;
+    this.productUrl = this.mediaMetadata.photo ? productUrl : `${environment.staticAssets}/${fileSystemInfos.webkitRelativePath}`;
     this.baseUrl = baseUrl;
     this.mimeType = mimeType;
     this.mediaMetadata = mediaMetadata;

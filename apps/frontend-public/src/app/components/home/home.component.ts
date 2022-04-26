@@ -261,4 +261,12 @@ export class HomeComponent implements OnInit {
       console.log(blobsInDirectory);
     }
   }
+
+  toggleVideo(video: HTMLMediaElement): void {
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause()
+    }
+  }
 }

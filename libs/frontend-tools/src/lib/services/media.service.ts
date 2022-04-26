@@ -105,10 +105,25 @@ export class MediaService extends GlobalService {
           });
 
           this.mediaStore.medias = mediasWellFormatted;
-          console.log(mediasWellFormatted);
+          // console.log(mediasWellFormatted);
 
           return mediasWellFormatted;
         }),
+        catchError(error => this.handleError(error))
+      );
+
+    return await firstValueFrom(source$);
+  }
+
+  /**
+   * Delete all medias from backend
+   */
+   public async deleteAllMedias(): Promise<any> {
+    const url = `${this.baseUrlMedia}`;
+    const source$ = this.http.delete<any>(url)
+      .pipe(
+        delay(1000),
+        timeout(10000),
         catchError(error => this.handleError(error))
       );
 

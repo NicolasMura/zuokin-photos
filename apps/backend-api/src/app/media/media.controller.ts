@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
   Body,
   Logger,
   Param,
@@ -90,5 +91,12 @@ export class MediaController {
     const imgPath = 'bob.jpg';
     // const imgPath = await this.mediaService.findMediaById(imgId);
     return res.sendFile(imgPath, { root: this.configService.get<string>('UPLOAD_FOLDER_TMP') });
+  }
+
+  // @Public()
+  @Delete('')
+  async deleleAllMedias() {
+    console.log('Delete all medias!');
+    return this.mediaService.deleteAllMedias();
   }
 }

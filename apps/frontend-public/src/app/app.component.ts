@@ -52,11 +52,13 @@ export class AppComponent implements OnInit {
     console.log(environment);
     this.navigation.startSaveHistory();
 
-    // subscribe to current user observable
+    // subscribe to current user observable & get medias when user is logged
     this.currentUser$ = this.userService.currentUser$;
-
-    console.log('Home Page');
-    this.getAllMedias();
+    this.currentUser$.subscribe((user: User) => {
+      if (user) {
+        this.getAllMedias();
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -99,10 +101,23 @@ export class AppComponent implements OnInit {
       .then((medias: Media[]) => {
         console.log(medias);
         medias.forEach((media: Media) => {
-          console.log(media.mediaMetadata?.tags?.get('ExifReaderTags'));
+          // console.log(media.mediaMetadata?.tags?.get('ExifReaderTags'));
         })
       })
       .finally(() => this.isRefreshing = false)
+      .catch(error => {
+        console.error(error);
+        this.errors.somethingIsBroken.statusCode = error.status && error.status !== 0 ? error.status.toString() : '0';
+        this.errors.somethingIsBroken.statusMessage = error.message ? error.message : 'Unknown error';
+      });
+  }
+
+  deleteAll(): void {
+    this.mediaService.deleteAllMedias()
+      .then((response: any) => {
+        console.log(response);
+        this.ngOnInit();
+      })
       .catch(error => {
         console.error(error);
         this.errors.somethingIsBroken.statusCode = error.status && error.status !== 0 ? error.status.toString() : '0';

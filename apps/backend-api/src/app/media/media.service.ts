@@ -1,11 +1,16 @@
 import { ConflictException, HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Media } from '@zuokin-photos/models';
+import { rmdir } from 'fs';
 
 @Injectable()
 export class MediaService {
-  constructor(@InjectModel(Media.name) private mediaModel : Model<Media>) {}
+  constructor(
+    @InjectModel(Media.name) private mediaModel : Model<Media>,
+    private configService: ConfigService
+  ) {}
 
   async findMediaById(id: number): Promise<Media | undefined> {
     const media: Media = await this.mediaModel.findOne({
@@ -57,5 +62,20 @@ export class MediaService {
     Logger.log(savedMedia);
 
     return savedMedia;
+  }
+
+  async deleteAllMedias(): Promise<Media[]> {
+    const result: any = await this.mediaModel.deleteMany()
+    .exec();
+
+    rmdir(`${this.configService.get<string>('UPLOAD_FOLDER_TMP')}/medias`, { recursive: true }, (err) => {
+    if (err) {
+        throw err;
+    }
+
+    console.log(`${this.configService.get<string>('UPLOAD_FOLDER_TMP')}/medias is deleted!`);
+});
+
+    return result;
   }
 }

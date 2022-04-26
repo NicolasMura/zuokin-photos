@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   template: `
     <div class="page gallery">
 
-      <div class="content">
+      <div class="content padded">
         <div>Settings page</div>
       </div>
 
