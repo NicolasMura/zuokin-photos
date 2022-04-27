@@ -5,14 +5,15 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxWebstorageModule } from 'ngx-webstorage';
-import { FrontendToolsModule, TokenInterceptor, WINDOW } from '@zuokin-photos/frontend-tools';
+import { environment, FrontendToolsModule, TokenInterceptor, WINDOW } from '@zuokin-photos/frontend-tools';
 import { MaterialModule } from '@zuokin-photos/vendors';
-import { AppComponent, NavigationService } from './app.component';
+import { AppComponent, IosInstallComponent, NavigationService } from './app.component';
 import { RetainScrollPolyfillModule } from './modules/retain-scroll-polyfill/retain-scroll-polyfill.module';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import { AppRoutingModule } from './app-routing.module';
     LoginComponent,
     HomeComponent,
     SettingsComponent,
-    // IosInstallComponent
+    IosInstallComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +41,13 @@ import { AppRoutingModule } from './app-routing.module';
 			pollCadence: 50
 		}),
     NgxWebstorageModule.forRoot(),
+    // ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
     // SwiperModule,
     AppRoutingModule,
     FrontendToolsModule,

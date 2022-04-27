@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { environment, User, AuthService, UserService, UtilitiesService, Media, MediaService, WINDOW } from '@zuokin-photos/frontend-tools';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { environment, IBuildInfos, User, AuthService, UserService, UtilitiesService, Media, MediaService, WINDOW } from '@zuokin-photos/frontend-tools';
 import {
   fileOpen,
   directoryOpen,
@@ -9,8 +10,7 @@ import {
   supported,
   FileWithDirectoryHandle,
 } from 'browser-fs-access';
-import * as fs from 'fs';
-import * as ExifReader from 'exifreader';
+import { buildInfos } from '../build';
 
 
 @Component({
@@ -20,6 +20,11 @@ import * as ExifReader from 'exifreader';
 })
 export class AppComponent implements OnInit {
   title = 'frontend-public';
+  /**
+   * build infos: hash, timestamp, user and jenkins Build Id
+   * Allow use of buildInfo variable inside template, for display build infos
+   */
+  buildInfos: IBuildInfos;
   /**
    * Observable that gives current user
    */
@@ -42,6 +47,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     public router: Router,
+    // private swUpdate: SwUpdate,
+    private snackBar: MatSnackBar,
     public navigation: NavigationService,
     private authService: AuthService,
     private userService: UserService,
@@ -50,6 +57,24 @@ export class AppComponent implements OnInit {
     @Inject(WINDOW) private window: Window & { __env: any }
   ) {
     console.log(environment);
+    this.buildInfos = buildInfos;
+    console.log(
+      `\n%cBuild Info:\n\n` +
+        `%c ❯ Build env.: %c${
+          environment.production ? 'production 🏭' : 'development 🚧'
+        }\n` +
+        `%c ❯ Build Version: ${buildInfos.jenkinsBuildNumber}\n` +
+        ` ❯ Hash: ${buildInfos.hash}\n` +
+        // ` ❯ User: ${buildInfos.user}\n` +
+        ` ❯ Build Timestamp: ${buildInfos.timestamp}\n`,
+      'font-size: 12px; color: #7c7c7b;',
+      'font-size: 12px; color: #7c7c7b',
+      environment.production
+        ? 'font-size: 12px; color: #95c230;'
+        : 'font-size: 12px; color: #e26565;',
+      'font-size: 12px; color: #7c7c7b'
+    );
+
     this.navigation.startSaveHistory();
 
     // subscribe to current user observable & get medias when user is logged
@@ -70,7 +95,63 @@ export class AppComponent implements OnInit {
     }, error => {
       console.error(error);
     });
+
+    // try to lock screen orientation to portrait mode (not supported in Safari & iOS)
+    this.tryToLockScreenOrientation();
+
+    // connect to WebSocket Server
+    // this.webSocketService.connect();
+
+    // Service Workers
+    // this.checkForServiceWorkersUpdate();
+
+    /* iOS specific */
+    // See https://itnext.io/part-1-building-a-progressive-web-application-pwa-with-angular-material-and-aws-amplify-5c741c957259
+    // Checks if should display install popup notification:
+    if (this.utilitiesService.isIos() && !this.utilitiesService.isInStandaloneModeiOS()) {
+      this.snackBar.openFromComponent(IosInstallComponent, {
+        duration: 0,
+        horizontalPosition: 'start',
+        panelClass: ['mat-elevation-z3']
+      });
+    }
+    /* iOS specific */
   }
+
+  public tryToLockScreenOrientation(): void {
+    console.log('try to lock screen orientation to portrait mode');
+    const screenOrientation = window.screen.orientation;
+    console.log(screenOrientation);
+    if (screenOrientation) {
+      screenOrientation.lock('portrait')
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => console.log(error));
+    } else {
+      console.log('window.screen.orientation not available... snif...');
+      document.addEventListener('orientationchange', (bob) => {
+        console.log(bob);
+      });
+    }
+  }
+
+  // public checkForServiceWorkersUpdate(): void {
+  //   this.swUpdate.available.subscribe(event => {
+  //     console.log('current version is', event.current);
+  //     console.log('available version is', event.available);
+
+  //     this.notificationService.sendNotification('Nouvelle version disponible ! Mettre à jour ?', 'OK')
+  //       .onAction().subscribe(() => {
+  //         window.location.reload();
+  //       });
+  //   });
+
+  //   this.swUpdate.activated.subscribe(event => {
+  //     console.log('old version was', event.previous);
+  //     console.log('new version is', event.current);
+  //   });
+  // }
 
   public logout(): void {
     this.authService.logout();
@@ -166,5 +247,54 @@ export class NavigationService {
     }
 
     return '';
+  }
+}
+
+import { MatSnackBarRef } from '@angular/material/snack-bar';
+
+@Component({
+  // selector: 'app-ios-install',
+  template: `
+    <style>
+      :host {
+        opacity: 0.8;
+      }
+      .content {
+        margin: 0.5em;
+        text-align: center;
+      }
+      .full-width {
+        margin-top: 1em;
+        width: 100%;
+        text-align: center;
+      }
+      .link-close {
+        color: red;
+        font-variant-caps: all-petite-caps;
+        font-weight: bold;
+      }
+      .btn-close {
+        position: absolute;
+        top: 1em;
+        right: 1em;
+      }
+    </style>
+    <div class="content">
+      Install this app on your device.
+      <br/>Tap the share icon and then <br/><strong>Add to homescreen</strong>.
+      <div class="full-width"><mat-icon>arrow_downward</mat-icon></div>
+    </div>
+    <button class="btn-close" mat-icon-button (click)="close()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </button>
+  `
+})
+export class IosInstallComponent {
+  constructor(
+    private snackBarRef: MatSnackBarRef<IosInstallComponent>
+  ) {}
+
+  close(): void {
+    this.snackBarRef.dismiss();
   }
 }

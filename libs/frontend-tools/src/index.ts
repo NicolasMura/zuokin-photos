@@ -6,6 +6,7 @@ export * from './lib/directives/autofocus.directive';
 export * from './lib/components/something-is-broken/something-is-broken.component';
 export * from './lib/guards/auth.guard';
 export * from './lib/interceptors/token.interceptor';
+export * from './lib/models/build-infos.model';
 export * from './lib/models/user.model';
 export * from './lib/models/media.model';
 export * from './lib/models/media-metadata.model';
