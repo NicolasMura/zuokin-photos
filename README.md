@@ -26,6 +26,7 @@ Fullstack monorepo for Zuokin Photos PWA project. With Angular frontend, NestJS 
 - [Interesting stuffs to do / Nice to have](#interesting-stuffs-to-do--nice-to-have)
 - [Common troubleshootings](#common-troubleshootings)
   - [API Container is unhealthy and doesn't start](#api-container-is-unhealthy-and-doesnt-start)
+  - [Service worker generation failed when yarn deploy:frontend-public:dockerhub (nx build frontend-public --prod)](#service-worker-generation-failed-when-yarn-deployfrontend-publicdockerhub-nx-build-frontend-public---prod)
 - [A few words about Nx](#a-few-words-about-nx)
   - [CheatSheet](#cheatsheet)
 
@@ -260,6 +261,120 @@ For Mac OS X users, also try to clean the bind mounted volume for MongoDB `/data
 >   docker-compose --env-file .env down
 >   docker-compose --env-file .env up -d # OR docker-compose --env-file .env up -d database
 > ```
+
+## Service worker generation failed when yarn deploy:frontend-public:dockerhub (nx build frontend-public --prod)
+
+```bash
+  nmura@Nico-MBA-WiFi zuokin-photos (main) $ nx build frontend-public --prod
+
+  > nx run frontend-public:build:production
+  ✔ Browser application bundle generation complete.
+  ✔ Copying assets complete.
+  ✔ Index html generation complete.
+  ✖ Service worker generation failed.
+
+  ———————————————————————————————————————————————
+
+  >  NX   ERROR  Running target "frontend-public:build" failed
+```
+
+This happens when trying to add Service Workers support via NX:
+
+```bash
+  nmura@Nico-MBA-WiFi zuokin-photos (main) $ ng add @angular/pwa --project frontend-public
+  Ng add is not natively supported by Nx
+  Instead, we recommend running `yarn add @angular/pwa && yarn nx g @angular/pwa:ng-add`
+  ✔ Run this command? (y/N) · true
+  (...)
+```
+
+=> For me, it installed "@angular/service-worker": "^13.3.4", which was too recent and caused production build to fail.
+
+The solution is do it manually:
+
+```bash
+  yarn remove @angular/pwa (if needed)
+  yarn remove @angular/service-worker (if needed)
+  yarn add @angular/service-worker@12.2.0 --tilde (adjust version if needed, it must match @angular libraries major version)
+```
+
+Then, follow everything described in https://www.npmjs.com/package/@angular/pwa and don't forget to adjust angular.json file to enable service worker builds:
+:
+
+```json
+  (...)
+  "projects": {
+    "frontend-public": {
+      "architect": {
+        "build": {
+          "configurations": {
+            "production": {
+              (...)
+              "serviceWorker": true,
+              "ngswConfigPath": "apps/frontend-public/ngsw-config.json",
+              "fileReplacements": [
+                {
+                  "replace": "apps/frontend-public/src/env.js",
+                  "with": "apps/frontend-public/src/env-for-prod-service-workers.js"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+```
+
+index.html
+
+```html
+  <html lang="en">
+  <head>
+    (...)
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#1976d2">
+  </head>
+  (...)
+  </html>
+```
+
+ngsw-config.json
+
+```json
+  {
+    "$schema": "../../node_modules/@angular/service-worker/config/schema.json",
+    "index": "/src/index.html",
+    "assetGroups": [
+      {
+        "name": "app",
+        "installMode": "prefetch",
+        "resources": {
+          "files": [
+            "/src/favicon.ico",
+            "/src/index.html",
+            "/src/manifest.webmanifest",
+            "/src/*.css",
+            "/src/*.js"
+          ]
+        }
+      },
+      {
+        "name": "assets",
+        "installMode": "lazy",
+        "updateMode": "prefetch",
+        "resources": {
+          "files": [
+            "/src/assets/**",
+            "/src/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
+          ]
+        }
+      }
+    ]
+  }
+```
 
 # A few words about Nx
 

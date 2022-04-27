@@ -6,7 +6,7 @@
         <!-- <a mat-list-item (click)="sidenav.toggle(); goToSettings();" *ngIf="(currentUser$ | async)?.email === 'contact@nicolasmura.fr'">Settings (soon...)</a> -->
         <a mat-list-item disabled *ngIf="(currentUser$ | async)?.email === 'contact@nicolasmura.fr'">V17</a>
         <a mat-list-item (click)="sidenav.toggle(); logout()"><mat-icon style="margin-right: 10px;">logout</mat-icon>Déconnexion</a>
-        <a mat-list-item (click)="sidenav.toggle(); deleteAll()"><mat-icon style="margin-right: 10px;">trash</mat-icon>Delete all</a>
+        <a mat-list-item (click)="sidenav.toggle(); deleteAll()"><mat-icon style="margin-right: 10px;">delete</mat-icon>Delete all</a>
       </mat-nav-list>
     </mat-sidenav>
 

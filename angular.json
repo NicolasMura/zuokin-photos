@@ -100,9 +100,7 @@
                 "libs/frontend-tools/src/lib/styles"
               ]
             },
-            "scripts": [],
-            "serviceWorker": true,
-            "ngswConfigPath": "apps/frontend-public/ngsw-config.json"
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -118,7 +116,9 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": true,
+              "ngswConfigPath": "apps/frontend-public/ngsw-config.json"
             },
             "development": {
               "buildOptimizer": false,
