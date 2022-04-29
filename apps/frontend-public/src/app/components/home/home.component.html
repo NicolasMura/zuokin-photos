@@ -17,7 +17,7 @@
       <div *ngIf="mediaService.getMedias()?.length === 0" style="margin-left: 20px; margin-bottom: 20px;">
         Rien à afficher
       </div>
-      <div *ngFor="let media of mediaService.getMedias()">
+      <div *ngFor="let media of sortMediasByUnixDate(mediaService.getMedias() || [])">
         <!-- <img *ngIf="media.mediaMetadata.photo" [src]="media.thumbnail || media.productUrl" alt=""> -->
         <img *ngIf="media.mediaMetadata.photo" [src]="domSanitizer.bypassSecurityTrustUrl('data:image/png;base64, ' + media.thumbnail) || media.productUrl" alt="">
         <video #video *ngIf="media.mediaMetadata.video" disableRemotePlayback [controls]="false" (click)="toggleVideo(video)">
