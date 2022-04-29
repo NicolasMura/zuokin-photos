@@ -38,7 +38,7 @@ export class MediaService {
     Logger.log(newMedia);
 
     const existingMedia: Media = await this.mediaModel.findOne({
-      filename: newMedia.filename
+      fileName: newMedia.fileName
     });
 
     if (existingMedia) {

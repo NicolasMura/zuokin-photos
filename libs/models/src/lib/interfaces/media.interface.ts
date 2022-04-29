@@ -1,3 +1,4 @@
+import { SafeUrl } from '@angular/platform-browser';
 import { IMediaFileSystemInfos } from './media-filesystem-infos.interface';
 import { IMediaMetadata } from './media-metadata.interface';
 
@@ -7,5 +8,6 @@ export interface IMedia {
   mimeType: string;
   mediaMetadata?: IMediaMetadata;
   fileSystemInfos: IMediaFileSystemInfos;
-  filename: string;
+  fileName: string;
+  thumbnail: SafeUrl;
 }

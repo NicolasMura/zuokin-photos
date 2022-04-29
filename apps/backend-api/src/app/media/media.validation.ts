@@ -48,7 +48,9 @@ export class MediaValidation {
       baseUrl: Joi.string().required(),
       mimeType: Joi.string().required(),
       mediaMetadata: mediaMetadataSchema,
-      fileSystemInfos: fileSystemInfosSchema
+      fileSystemInfos: fileSystemInfosSchema,
+      filename: Joi.string().required(),
+      thumbnail: Joi.string().required()
     });
 
     return mediaSchema.validate(params)

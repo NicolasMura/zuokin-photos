@@ -5,7 +5,7 @@ $actionsbarHeight: 64px;
 
 .gallery {
   .content {
-    .medias-container {
+    .medias-container:not(.no-media) {
       display: grid;
       // grid-template-columns: repeat(3, 1fr);
       grid-template-columns: 1fr 1fr 1fr;
@@ -30,9 +30,15 @@ $actionsbarHeight: 64px;
       // width: 100px;
       // height: 100px;
     }
-  }
 
-  .file-input {
-    display: none;
+    .file-input {
+      display: none;
+    }
+
+    .file-upload {
+      img, video {
+        width: 100%;
+      }
+    }
   }
 }

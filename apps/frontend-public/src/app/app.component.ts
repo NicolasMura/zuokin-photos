@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SwUpdate } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { environment, IBuildInfos, User, AuthService, UserService, UtilitiesService, Media, MediaService, WINDOW } from '@zuokin-photos/frontend-tools';
+import { environment, IBuildInfos, User, AuthService, UserService, NotificationService, UtilitiesService, Media, MediaService, WINDOW } from '@zuokin-photos/frontend-tools';
 import {
   fileOpen,
   directoryOpen,
@@ -10,6 +11,7 @@ import {
   supported,
   FileWithDirectoryHandle,
 } from 'browser-fs-access';
+import * as moment from 'moment';
 import { buildInfos } from '../build';
 
 
@@ -47,11 +49,12 @@ export class AppComponent implements OnInit {
 
   constructor(
     public router: Router,
-    // private swUpdate: SwUpdate,
+    private swUpdate: SwUpdate,
     private snackBar: MatSnackBar,
     public navigation: NavigationService,
     private authService: AuthService,
     private userService: UserService,
+    private notificationService: NotificationService,
     private utilitiesService: UtilitiesService,
     public mediaService: MediaService,
     @Inject(WINDOW) private window: Window & { __env: any }
@@ -103,7 +106,7 @@ export class AppComponent implements OnInit {
     // this.webSocketService.connect();
 
     // Service Workers
-    // this.checkForServiceWorkersUpdate();
+    this.checkForServiceWorkersUpdate();
 
     /* iOS specific */
     // See https://itnext.io/part-1-building-a-progressive-web-application-pwa-with-angular-material-and-aws-amplify-5c741c957259
@@ -136,22 +139,22 @@ export class AppComponent implements OnInit {
     }
   }
 
-  // public checkForServiceWorkersUpdate(): void {
-  //   this.swUpdate.available.subscribe(event => {
-  //     console.log('current version is', event.current);
-  //     console.log('available version is', event.available);
+  public checkForServiceWorkersUpdate(): void {
+    this.swUpdate.available.subscribe(event => {
+      console.log('current version is', event.current);
+      console.log('available version is', event.available);
 
-  //     this.notificationService.sendNotification('Nouvelle version disponible ! Mettre à jour ?', 'OK')
-  //       .onAction().subscribe(() => {
-  //         window.location.reload();
-  //       });
-  //   });
+      this.notificationService.sendNotification('Nouvelle version disponible ! Mettre à jour ?', 'OK')
+        .onAction().subscribe(() => {
+          window.location.reload();
+        });
+    });
 
-  //   this.swUpdate.activated.subscribe(event => {
-  //     console.log('old version was', event.previous);
-  //     console.log('new version is', event.current);
-  //   });
-  // }
+    this.swUpdate.activated.subscribe(event => {
+      console.log('old version was', event.previous);
+      console.log('new version is', event.current);
+    });
+  }
 
   public logout(): void {
     this.authService.logout();
@@ -164,12 +167,13 @@ export class AppComponent implements OnInit {
   public goToGallery(): void {
     const historyLength = this.navigation.getHistory().length;
     const index = this.navigation.getHistory().lastIndexOf('/');
+
     if (index >= 0) {
       console.log('Go to history n ', 0 - (historyLength - index - 1));
       this.window.history.go(0 - (historyLength - index - 1));
     } else {
       console.log('this.router.navigate([\'\']);')
-      this.router.navigate(['']);
+      this.router.navigate(['/']);
     }
   }
 
@@ -182,7 +186,9 @@ export class AppComponent implements OnInit {
       .then((medias: Media[]) => {
         console.log(medias);
         medias.forEach((media: Media) => {
+          // console.log(media.fileName);
           // console.log(media.mediaMetadata?.tags?.get('ExifReaderTags'));
+          // console.log(moment.unix(moment(media.mediaMetadata?.tags?.get('creationJsDateTime')).unix()).format());
         })
       })
       .finally(() => this.isRefreshing = false)
@@ -204,6 +210,10 @@ export class AppComponent implements OnInit {
         this.errors.somethingIsBroken.statusCode = error.status && error.status !== 0 ? error.status.toString() : '0';
         this.errors.somethingIsBroken.statusMessage = error.message ? error.message : 'Unknown error';
       });
+  }
+
+  refresh(): void {
+    window.location.reload();
   }
 }
 

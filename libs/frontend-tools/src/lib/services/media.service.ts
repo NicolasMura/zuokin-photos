@@ -58,7 +58,8 @@ export class MediaService extends GlobalService {
             media.mimeType,
             media.mediaMetadata,
             media.fileSystemInfos,
-            media.filename,
+            media.fileName,
+            media.thumbnail,
             media._id
           ));
 
@@ -99,7 +100,8 @@ export class MediaService extends GlobalService {
               media.mimeType,
               mediaMetadata,
               media.fileSystemInfos,
-              media.filename,
+              media.fileName,
+              media.thumbnail,
               media._id
             )
           });
@@ -159,10 +161,11 @@ export class MediaService extends GlobalService {
   public async createMedia(media: Media): Promise<any> {
     console.log(media);
     const mediaForUpload = {...media} as any;
+    console.log(mediaForUpload);
     if (media.mediaMetadata.photo) {
       mediaForUpload.mediaMetadata.tags = Object.fromEntries(mediaForUpload.mediaMetadata?.tags);
     }
-    console.log(media);
+    console.log(mediaForUpload);
 
     const url = `${this.baseUrlMedia}`;
     const source$ = this.http.post<HttpEvent<any>>(

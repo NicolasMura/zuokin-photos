@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
-import { DomSanitizer } from '@angular/platform-browser';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import {
   fileOpen,
   directoryOpen,
@@ -10,8 +10,8 @@ import {
 } from 'browser-fs-access';
 import { Subscription } from 'rxjs';
 import { Media, MediaFileSystemInfos, MediaMetadata, MediaService } from '@zuokin-photos/frontend-tools';
-import * as fs from 'fs';
 import * as ExifReader from 'exifreader';
+import * as moment from 'moment';
 
 @Component({
   selector: 'zphotos-home',
@@ -26,16 +26,15 @@ export class HomeComponent implements OnInit {
     file: File,
     fileName: string,
     media: Media,
-    testThumbnail: any,
+    preview: SafeUrl,
     uploadProgress: number
   }[] = [];
   uploadProgress!: number;
   uploadSub!: Subscription;
 
   constructor(
-    private http: HttpClient,
     public mediaService: MediaService,
-    private domSanitizer: DomSanitizer
+    public domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -48,6 +47,14 @@ export class HomeComponent implements OnInit {
       medias.forEach((media: Media) => {
         console.log(media.mediaMetadata?.tags?.get('ExifReaderTags'));
       })
+    });
+  }
+
+  public sortMediasByUnixDate(medias: Media[]): Media[] {
+    return medias.sort((m1: Media, m2: Media) => {
+      if (Number(m1.mediaMetadata.creationTime) > Number(m2.mediaMetadata.creationTime)) { return -1 };
+      if (Number(m1.mediaMetadata.creationTime) <= Number(m2.mediaMetadata.creationTime)) { return 1 };
+      return 0;
     });
   }
 
@@ -64,15 +71,27 @@ export class HomeComponent implements OnInit {
     if (files.length > 0) {
       [...files]
         .forEach(async (file: File, i: number) => {
-          console.log(file);
-          console.log(i);
-          let tags;
+          let tags: any;
+          let thumbnail = undefined;
 
           if (file.type.indexOf('image') > -1) {
             tags = await ExifReader.load(file);
+            // tags = Object.assign(tags);
+            // console.log(tags);
+
+            // Save thumbnail base64 image and delete 'Thumbnail' tags entry (because too big => cause a 403 error: request entity too large)
+            if (tags && (typeof(tags) === 'object') && Object.prototype.hasOwnProperty.call(tags, 'Thumbnail')) {
+              thumbnail = tags.Thumbnail.base64;
+              delete tags.Thumbnail;
+              // console.log(thumbnail);
+              if (file.name === 'IMG_20200430_192929.jpg') {
+                // console.log('IMG_20200430_192929.jpg tags:');
+                // console.log(tags);
+              }
+            }
           }
 
-          console.log(tags);
+          const jsDateTime = tags?.DateTime?.value[0]?.split(' ')[0].replace(/:/g, '-') + ' ' + tags?.DateTime?.value[0]?.split(' ')[1];
 
           const isPhoto = file.type.indexOf('image') > -1;
           const isVideo = file.type.indexOf('video') > -1;
@@ -81,10 +100,10 @@ export class HomeComponent implements OnInit {
             '',
             file.type,
             new MediaMetadata(
+              isPhoto ? (moment(new Date(jsDateTime)).unix()).toString() : '',
               '',
               '',
-              '',
-              isPhoto ? { ExifReaderTags: tags } : undefined,
+              isPhoto ? { ExifReaderTags: tags, creationJsDateTime: new Date(jsDateTime) } : undefined,
               isVideo ? {
                 fps: 0,
                 status: '',
@@ -98,24 +117,6 @@ export class HomeComponent implements OnInit {
                 exposureTime: ''
               } : undefined
             ),
-            // {
-            //   creationTime: '',
-            //   width: '',
-            //   height: '',
-            //   tags: isPhoto ? (new Map()).set('ExifReaderTags', tags) : undefined, // { ExifReaderTags: tags } : undefined,
-            //   video: isVideo ? {
-            //     fps: 0,
-            //     status: '',
-            //   } : undefined,
-            //   photo: isPhoto ? {
-            //     cameraMake: '',
-            //     cameraModel: '',
-            //     focalLength: 0,
-            //     apertureFNumber: 0,
-            //     isoEquivalent: 0,
-            //     exposureTime: ''
-            //   } : undefined
-            // },
             new MediaFileSystemInfos(
               {
                 // kind: blob.directoryHandle?.kind,
@@ -130,17 +131,20 @@ export class HomeComponent implements OnInit {
               file.size,
               file.type
             ),
-            file.name
+            file.name,
+            // '',
+            thumbnail,
           );
-          console.log(newMedia);
 
           if (isVideo) console.log(window.URL.createObjectURL(file));
+
           this.filesInfos.push({
             file: file,
             fileName: event.target.files[i].webkitRelativePath,
             media: newMedia,
-            // testThumbnail: newMedia?.mediaMetadata?.photo ? this.domSanitizer.bypassSecurityTrustUrl('data:image/png;base64, ' + tags?.Thumbnail?.base64) : '',
-            testThumbnail: isPhoto ? this.domSanitizer.bypassSecurityTrustUrl('data:image/png;base64, ' + newMedia.mediaMetadata?.tags?.get('ExifReaderTags')?.Thumbnail?.base64) : this.domSanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file)),
+            preview: isPhoto ?
+              this.domSanitizer.bypassSecurityTrustUrl('data:image/png;base64, ' + thumbnail)
+              : this.domSanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file)),
             uploadProgress: 0
           });
       });
@@ -154,11 +158,12 @@ export class HomeComponent implements OnInit {
 
   public uploadSelectedFiles(): void {
     const formData = new FormData();
+    const medias: Media[] = this.filesInfos.map((fileInfos: { file: File, fileName: string, media: Media, preview: SafeUrl, uploadProgress: number }) => fileInfos.media);
 
     formData.append('test', JSON.stringify({ bob: 'marley' }));
+    formData.append('medias', JSON.stringify(medias));
     if (this.filesInfos) {
       this.filesInfos.forEach((fileInfos: { file: File, fileName: string, media: Media, uploadProgress: number }, index: number) => {
-        console.log(fileInfos);
         fileInfos.uploadProgress = 0;
         formData.append('files[]', fileInfos.file);
         // formData.append('files', file, file.name);
@@ -209,13 +214,51 @@ export class HomeComponent implements OnInit {
             }
           },
           error: (e) => console.error(e),
-          complete: () => console.log('complete')
+          complete: () => {
+            console.log('complete');
+            this.mediaService.createMedia(fileInfos.media).then((response) => {
+              console.log(response);
+            });
+          }
         });
+      });
+    }
+  }
+
+  public uploadSelectedFilesTest(): void {
+    if (this.filesInfos) {
+      this.filesInfos.forEach((fileInfos: { file: File, fileName: string, media: Media, uploadProgress: number }, index: number) => {
+        // console.log(fileInfos);
+        fileInfos.uploadProgress = 0;
+
+        const formData = new FormData();
+
+        formData.append('test', JSON.stringify({ bob: 'marley' }));
+        formData.append('medias', JSON.stringify(fileInfos.media));
+        formData.append('files[]', fileInfos.file);
 
         this.mediaService.createMedia(fileInfos.media).then((response) => {
           console.log(response);
-        });
 
+          this.mediaService.updloadMedias(formData).subscribe({
+            next: (event: HttpEvent<any>) => {
+              // console.log(event);
+              // console.log(event.type);
+              if (event?.type == HttpEventType.UploadProgress) {
+                // console.log('HttpEventType');
+                // const index = this.filesInfos.findIndex((fileInfos: { file: File, fileName: string, uploadProgress: number }) =>
+                //   fileInfos.fileName === file.webkitRelativePath);
+                this.filesInfos[index].uploadProgress = event?.total && event?.total !== 0
+                  ? Math.round(100 * (event.loaded / event.total))
+                  : 0;
+              }
+            },
+            error: (e) => console.error(e),
+            complete: () => console.log('complete')
+          });
+        })
+        .catch(e => console.error(e))
+        .finally(() => console.log('finally'));
       });
     }
   }

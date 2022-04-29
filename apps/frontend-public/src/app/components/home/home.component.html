@@ -11,13 +11,16 @@
     <input type="file" class="file-upload" (change)="showFiles($event)" multiple>
     <ul id="listing"></ul> -->
 
-    <div *ngIf="mediaService.getMedias(); else skeleton" [ngClass]="{'medias-container': mediaService.getMedias()}">
-      <div *ngIf="mediaService.getMedias()?.length === 0">
+    <div *ngIf="mediaService.getMedias(); else skeleton"
+         class="medias-container"
+         [ngClass]="{'no-media': mediaService.getMedias()?.length === 0}">
+      <div *ngIf="mediaService.getMedias()?.length === 0" style="margin-left: 20px; margin-bottom: 20px;">
         Rien à afficher
       </div>
       <div *ngFor="let media of mediaService.getMedias()">
-        <img *ngIf="media.mediaMetadata.photo" [src]="media.productUrl" alt="">
-        <video #video *ngIf="media.mediaMetadata.video" [controls]="false" (click)="toggleVideo(video)">
+        <!-- <img *ngIf="media.mediaMetadata.photo" [src]="media.thumbnail || media.productUrl" alt=""> -->
+        <img *ngIf="media.mediaMetadata.photo" [src]="domSanitizer.bypassSecurityTrustUrl('data:image/png;base64, ' + media.thumbnail) || media.productUrl" alt="">
+        <video #video *ngIf="media.mediaMetadata.video" disableRemotePlayback [controls]="false" (click)="toggleVideo(video)">
           <!-- <source src="/media/cc0-videos/flower.webm"
                   type="video/webm"> -->
           <source [src]="media.productUrl"
@@ -38,37 +41,40 @@
     <!-- <input type="file" class="file-input"
           (change)="onFileSelected($event)" #selectFiles> -->
 
-    <button mat-mini-fab color="primary" class="upload-btn"
-          (click)="selectFiles.click()" #selectFilePretty>
+    <div style="display: flex; justify-content: space-between;">
+      <button mat-mini-fab color="primary" class="upload-btn"
+              (click)="selectFiles.click()" #selectFilePretty
+              style="margin-left: 20px;">
       <mat-icon>attach_file</mat-icon>
     </button>
+    <button mat-mini-fab color="primary" class="upload-btn"
+            [disabled]="filesInfos.length === 0"
+            (click)="uploadSelectedFilesTest()"
+            style="margin-right: 20px">
+        <mat-icon>file_upload</mat-icon>
+    </button>
+    </div>
 
     <div class="file-upload">
-      <div *ngFor="let fileInfos of filesInfos">
-        <img *ngIf="fileInfos.media.mediaMetadata.photo" [src]="fileInfos.testThumbnail" alt="">
-        <video *ngIf="fileInfos.media.mediaMetadata.video" controls width="250">
+      <div *ngFor="let fileInfos of filesInfos" style="margin-top: 20px;">
+        <img *ngIf="fileInfos.media.mediaMetadata.photo" [src]="fileInfos.preview" alt="">
+        <video *ngIf="fileInfos.media.mediaMetadata.video" disableRemotePlayback controls width="250">
           <!-- <source src="/media/cc0-videos/flower.webm"
                   type="video/webm"> -->
-          <source [src]="fileInfos.testThumbnail"
+          <source [src]="fileInfos.preview"
                   type="video/mp4">
           Sorry, your browser doesn't support embedded videos.
         </video>
-        <pre>
-          {{ fileInfos.fileName | json }}
+        <div style="font-family: monospace;">
+          <div style="word-break: break-all;">{{ fileInfos.fileName }}</div>
           <mat-progress-bar class="progress-bar" mode="determinate"
                             [value]="fileInfos.uploadProgress" *ngIf="fileInfos.uploadProgress">
           </mat-progress-bar>
-        </pre>
+        </div>
       </div>
       <pre *ngIf="filesInfos?.length === 0">
         No file selected yet.
       </pre>
-
-      <button mat-mini-fab color="primary" class="upload-btn"
-              [disabled]="filesInfos.length === 0"
-              (click)="uploadSelectedFiles()">
-          <mat-icon>file_upload</mat-icon>
-      </button>
     </div>
 
     <div class="progress">
